@@ -14,18 +14,18 @@
     <div class="container">
       <div class="darkGlass">
         <div class="login">
-          <form method="POST" action="">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Username" />
-            <input type="password" name="password" placeholder="Password" />
-            <button type="submit">Log in</button>
-          </form>
-
+          <h1>Log in</h1>
           <ul>
             {% for massage in messages %}
             <li>{{massage}}</li>
             {% endfor %}
           </ul>
+          <form method="POST" action="">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" />
+            <input type="password" name="password" placeholder="Password" />
+            <button type="submit">submit</button>
+          </form>
         </div>
       </div>
     </div>

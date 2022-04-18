@@ -69,7 +69,7 @@ nav .categories a:hover {
   margin-top: 20px;
 }
 .login {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
   padding: 30px;
   border-radius: 5px;
   position: absolute;
@@ -77,6 +77,32 @@ nav .categories a:hover {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
   animation: appear 2s forwards;
+  text-align: center;
+}
+.login form {
+  width: 100%;
+}
+.login form input {
+  background-color: rgba(97, 47, 0, 0.399);
+  margin: 10px;
+  color: white;
+  outline: none;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid rgb(185, 185, 185);
+  font-size: 1rem;
+  border-radius: 5px;
+}
+.login form button {
+  font-size: inherit;
+  font-weight: bold;
+  padding: 5px 10px;
+  background-color: rgba(97, 47, 0, 0.399);
+  color: inherit;
+  border-radius: 7px;
+}
+.login form button:hover {
+  cursor: pointer;
 }
 /*  */
 @keyframes getDarker {
