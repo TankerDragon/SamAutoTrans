@@ -1,0 +1,29 @@
+{% extends 'main.html' %} {% block content %}
+<div class="container">
+  <div class="table">
+    <table>
+      <thead>
+        <td>First name</td>
+        <td>Last name</td>
+        <td>Username</td>
+        <td>User Type</td>
+        <td>Last Login</td>
+        <td>Date Joined</td>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td>{{user.first_name}}</td>
+          <td>{{user.last_name}}</td>
+          <td>{{user.username}}</td>
+          <td>{{user.user_type}}</td>
+          <td>{{user.last_login}}</td>
+          <td>{{user.date_joined}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

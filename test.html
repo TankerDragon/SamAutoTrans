@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body style="background-color: rgb(78, 78, 78)">
+    <script>
+      function anagrams(word, words) {
+        sorted = [];
+        is_there = false;
+        for (let i = 0; i < words.length; i++) {
+          if (word.length == words[i].length) {
+            currentWord = words[i];
+            for (let j = 0; j < word.length; j++) {
+              for (let k = 0; k < currentWord.length; k++) {
+                if (word[j] == currentWord[k]) {
+                  currentWord = currentWord.slice(0, k) + currentWord.slice(k + 1);
+                }
+              }
+              if (currentWord == "") {
+                for (let n = 0; n < sorted.length; n++) {
+                  if (sorted[n] == words[i]) {
+                    is_there = true;
+                    break;
+                  }
+                }
+                if (!is_there) {
+                  sorted.push(words[i]);
+                } else {
+                  is_there = false;
+                }
+              }
+            }
+          }
+        }
+
+        return sorted;
+      }
+
+      console.log(anagrams("carer", ["carer", "racar", "racer"]));
+    </script>
+  </body>
+</html>
