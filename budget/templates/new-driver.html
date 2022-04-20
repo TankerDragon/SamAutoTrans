@@ -1,0 +1,32 @@
+{% extends 'main.html' %} {% block content %}
+<div id="register">
+  <h1>New Driver Registration</h1>
+  <form method="POST">
+    {% csrf_token %}
+    <div>
+      <label>{{form.first_name.label}}</label>
+      {{form.first_name}}
+    </div>
+    <div>
+      <label>{{form.last_name.label}}</label>
+      {{form.last_name}}
+    </div>
+    <div>
+      <label>{{form.dispatcher.label}}</label>
+      {{form.dispatcher}}
+    </div>
+    <div>
+      <label>{{form.updater.label}}</label>
+      {{form.updater}}
+    </div>
+    <div>
+      <label>{{form.is_active.label}}</label>
+      {{form.is_active}}
+    </div>
+
+    <input class="button" type="submit" value="Register" />
+    <div class="errors"></div>
+    {{form.errors}}
+  </form>
+</div>
+{% endblock %}
