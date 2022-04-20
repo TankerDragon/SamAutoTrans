@@ -8,7 +8,7 @@ def main(request):
 
 def loginPage(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('budget')
     else:
         if request.method == 'POST':
             username = request.POST.get('username')
