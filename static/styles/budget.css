@@ -61,7 +61,12 @@ nav a {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin: 10px;
+  padding: 10px;
+}
+#register form div:nth-child(odd) {
+  background-color: rgb(227, 227, 227);
+  box-shadow: 0 0 2px 1px rgb(227, 227, 227);
+  border-radius: 3px;
 }
 #register form label {
   font-size: 1.1rem;
@@ -83,8 +88,15 @@ nav a {
 .table {
   margin-top: 30px;
 }
+.table h1 {
+  margin-bottom: 20px;
+}
 .table table {
+  border-collapse: collapse;
   width: 100%;
+}
+.table table tr {
+  border: 1px solid rgb(163, 163, 163);
 }
 .table table td {
   padding: 10px 15px;

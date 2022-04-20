@@ -1,1 +1,34 @@
-{% extends 'main.html' %} {% block content %} number: {{num}} {% endblock %}
+{% extends 'main.html' %} {% block content %}
+
+<div class="container">
+  <div class="table">
+    <h1>Budget</h1>
+
+    <table>
+      <thead>
+        <td>First name</td>
+        <td>Last name</td>
+        <td>Dispatcher</td>
+        <td>Updater</td>
+        <td>Driver's Budget</td>
+        <td>Lane Budget</td>
+        <td>Recovery Budget</td>
+      </thead>
+      <tbody>
+        {% for driver in drivers %}
+        <tr>
+          <td>{{driver.first_name}}</td>
+          <td>{{driver.last_name}}</td>
+          <td>{{driver.dispatcher}}</td>
+          <td>{{driver.updater}}</td>
+          <td>{{driver.d_budget}}</td>
+          <td>{{driver.l_budget}}</td>
+          <td>{{driver.r_budget}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

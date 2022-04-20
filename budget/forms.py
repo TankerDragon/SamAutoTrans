@@ -1,9 +1,17 @@
+from pyexpat import model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
+from .models import Driver
 
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','first_name',
                   'last_name','user_type','is_active', 'password1', 'password2']
+
+class DriverForm(ModelForm):
+    class Meta:
+        model = Driver
+        # ['user_id', 'cdl_number', 'vehicle_id', 'notes']
+        fields = '__all__'
