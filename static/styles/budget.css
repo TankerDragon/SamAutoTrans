@@ -115,3 +115,20 @@ nav a {
   background-color: rgb(116, 131, 155);
   color: white;
 }
+.table table tbody .highLited {
+  font-weight: bold;
+  font-size: 1rem;
+  color: rgb(240, 212, 0);
+}
+.table table tbody .highLited i {
+  background-color: rgb(77, 77, 77);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table table tbody .highLited i:hover {
+  cursor: pointer;
+}

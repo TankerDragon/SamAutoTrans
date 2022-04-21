@@ -13,6 +13,7 @@
         <td>Driver's Budget</td>
         <td>Lane Budget</td>
         <td>Recovery Budget</td>
+        <td>Edit</td>
       </thead>
       <tbody>
         {% for driver in drivers %}
@@ -24,6 +25,7 @@
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
+          <td class="highLited"><i class="fa-solid fa-dollar-sign" onclick="modify({{driver.id}})"></i></td>
         </tr>
         {% endfor %}
       </tbody>
