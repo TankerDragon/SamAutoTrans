@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'main.html' %} {% block content %} {% load static %}
 
 <div class="container">
   <div class="table">
@@ -32,5 +32,17 @@
     </table>
   </div>
 </div>
+<div id="form">
+  <select name="budget-type" id="budget-type">
+    <option value="d-budget">Driver's Budget</option>
+    <option value="l-budget">Lane Budget</option>
+    <option value="r-budget">Recovery Budget</option>
+  </select>
+  <div class="buttons">
+    <button>Submit</button>
+    <button onclick="cancel()">Cancel</button>
+  </div>
+</div>
+<script src="{% static 'js/budget.js' %}"></script>
 
 {% endblock %}

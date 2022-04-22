@@ -15,6 +15,9 @@ nav {
   width: 100%;
   background-color: #ccc;
   display: flex;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 0 10px 5px rgb(127, 127, 127);
   justify-content: space-between;
   align-items: center;
   padding: 15px;
@@ -103,7 +106,7 @@ nav a {
 }
 .table table thead {
   color: white;
-  font-weight: 400;
+  font-weight: bold;
 }
 .table table thead tr {
   background-color: rgb(71, 90, 121);
@@ -131,4 +134,40 @@ nav a {
 }
 .table table tbody .highLited i:hover {
   cursor: pointer;
+}
+#form {
+  width: 50%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 5px 5px 10px 5px rgb(108, 108, 108);
+  border-radius: 5px;
+  position: fixed;
+  background-color: #f0f3f8;
+
+  display: none;
+}
+#form .buttons {
+  width: 20%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#form .buttons button {
+  font-weight: bold;
+  min-width: 11%;
+  background: transparent;
+  border: 2px solid #727272;
+  color: inherit;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: inherit;
+  transition: 0.3s ease;
+}
+#form .buttons button:hover {
+  cursor: pointer;
+  background-color: #727272;
+  color: #f0f3f8;
 }
