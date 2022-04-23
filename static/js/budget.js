@@ -1,7 +1,11 @@
 const form = document.getElementById("form");
 let disappeared = false;
 function modify(e, id) {
-  console.log(id);
+  // var this_row = e.parentElement.parentElement;
+  // var rows = document.getElementById("tbody").children;
+  // console.log(Array.prototype.indexOf.call(rows, this_row));
+  document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
+  console.log(e.parentElement.parentElement.children[0].innerText);
 
   disappeared = false;
   form.style.display = "block";

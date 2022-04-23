@@ -15,7 +15,7 @@
         <td>Recovery Budget</td>
         <td>Edit</td>
       </thead>
-      <tbody>
+      <tbody id="tbody">
         {% for driver in drivers %}
         <tr>
           <td>{{driver.first_name}}</td>
@@ -34,14 +34,21 @@
 </div>
 <div id="form">
   <div class="title-bar">Add to Budget</div>
-  <select name="budget-type" id="budget-type">
-    <option value="d-budget">Driver's Budget</option>
-    <option value="l-budget">Lane Budget</option>
-    <option value="r-budget">Recovery Budget</option>
-  </select>
-  <div class="buttons">
-    <button>Submit</button>
-    <button onclick="cancel()">Cancel</button>
+  <div class="contain">
+    <label for="f-name">Full name:</label>
+    <div id="full-name"></div>
+    <label for="amount">Change of amount:</label>
+    <input id="input-amount" type="number" />
+    <label for="b-type">Budget type:</label>
+    <select name="budget-type" id="budget-type">
+      <option value="d-budget">Driver's Budget</option>
+      <option value="l-budget">Lane Budget</option>
+      <option value="r-budget">Recovery Budget</option>
+    </select>
+    <div class="buttons">
+      <button>Submit</button>
+      <button onclick="cancel()">Cancel</button>
+    </div>
   </div>
 </div>
 <script src="{% static 'js/budget.js' %}"></script>
