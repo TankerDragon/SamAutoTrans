@@ -147,6 +147,13 @@ nav a {
   background-color: #f0f3f8;
 
   display: none;
+  /* animation: appear 1s ease; */
+}
+.active {
+  animation: appear 0.3s ease;
+}
+.inactive {
+  animation: disappear 0.3s ease;
 }
 #form .buttons {
   width: 20%;
@@ -170,4 +177,27 @@ nav a {
   cursor: pointer;
   background-color: #727272;
   color: #f0f3f8;
+}
+#form .title-bar {
+  background-color: rgb(116, 131, 155);
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 5px 5px 0 0;
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

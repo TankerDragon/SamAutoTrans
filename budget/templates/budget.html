@@ -25,7 +25,7 @@
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
-          <td class="highLited"><i class="fa-solid fa-dollar-sign" onclick="modify({{driver.id}})"></i></td>
+          <td class="highLited"><i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -33,6 +33,7 @@
   </div>
 </div>
 <div id="form">
+  <div class="title-bar">Add to Budget</div>
   <select name="budget-type" id="budget-type">
     <option value="d-budget">Driver's Budget</option>
     <option value="l-budget">Lane Budget</option>

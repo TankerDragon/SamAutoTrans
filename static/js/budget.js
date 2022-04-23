@@ -1,7 +1,19 @@
 const form = document.getElementById("form");
-function modify(id) {
+let disappeared = false;
+function modify(e, id) {
+  console.log(id);
+
+  disappeared = false;
   form.style.display = "block";
+  form.classList.toggle("active");
 }
 function cancel() {
-  form.style.display = "none";
+  form.classList.toggle("inactive");
+  disappeared = true;
 }
+form.onanimationend = () => {
+  if (disappeared) {
+    form.style.display = "none";
+    form.classList = "";
+  }
+};
