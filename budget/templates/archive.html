@@ -1,0 +1,34 @@
+{% extends 'main.html' %} {% block content %} {% load static %}
+
+<div class="container">
+  <div class="table">
+    <h1>Budget</h1>
+
+    <table>
+      <thead>
+        <td>Change</td>
+        <td>Driver's name</td>
+        <td>Changed by</td>
+        <td>Budget type</td>
+        <td>BOL number</td>
+        <td>PCS number</td>
+        <td>Date and Time</td>
+      </thead>
+      <tbody id="tbody">
+        {% for log in logs %}
+        <tr>
+          <td>{{log.change}}</td>
+          <td>{{log.name}}</td>
+          <td>{{log.user}}</td>
+          <td>{% if log.budget_type == 'D' %} Driver's{% elif log.budget_type == 'L' %} Lane{% elif log.budget_type == 'R' %} Recovery{% endif %} Budget</td>
+          <td>{{log.bol_number}}</td>
+          <td>{{log.pcs_number}}</td>
+          <td>{{log.date}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

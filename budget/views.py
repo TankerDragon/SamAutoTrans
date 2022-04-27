@@ -1,13 +1,13 @@
-from multiprocessing import context
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from budget.models import Driver
+from budget.models import Driver, Log
 from .forms import CreateUserForm, DriverForm
 from django.contrib.auth.models import User
 from .serializers import DriverSerializer
-
+from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 
 # class number:
 #     value = 0
@@ -20,53 +20,110 @@ from .serializers import DriverSerializer
 # n = number()
 
 # Create your views here.
+@login_required(login_url='login')
 def main(request):
-    queryset = Driver.objects.all()
-    context = {'drivers': queryset}
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        queryset = Driver.objects.all()
+    else:
+        if user.user_type == 'D':
+            queryset = Driver.objects.filter(dispatcher_id = user.id)
+        elif user.user_type == 'U':
+            queryset = Driver.objects.filter(updater_id = user.id)
+    for query in queryset:
+        query.total_budget = query.d_budget + query.l_budget + query.r_budget
+    
+    context = {'drivers': queryset, 'is_superuser': user.is_superuser}
     return render(request, 'budget.html', context)
 
+@login_required(login_url='login')
 def users(request):
-    queryset = User.objects.filter(is_superuser = 0)
-    context = {'users': queryset}
-    return render(request, 'users.html', context)
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        queryset = User.objects.filter(is_superuser = 0)
+        context = {'users': queryset, 'is_superuser': user.is_superuser}
+        return render(request, 'users.html', context)
+    else:
+        return redirect('no-access')
 
+@login_required(login_url='login')
 def new_user(request):
-    user_form = CreateUserForm()
-    if request.method == 'POST':
-        user_form = CreateUserForm(request.POST)
-        if user_form.is_valid():
-            user_form.save()
-            return redirect('budget')
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        user_form = CreateUserForm()
+        if request.method == 'POST':
+            user_form = CreateUserForm(request.POST)
+            if user_form.is_valid():
+                user_form.save()
+                return redirect('budget')
 
-    context = {'form': user_form}
-    return render(request, 'new-user.html', context)
+        context = {'form': user_form, 'is_superuser': user.is_superuser}
+        return render(request, 'new-user.html', context)
+    else:
+        return redirect('no-access')
 
+@login_required(login_url='login')
 def new_driver(request):
-    driver_form = DriverForm()
-    if request.method == 'POST':
-        driver_form = DriverForm(request.POST)
-        if driver_form.is_valid():
-            driver_form.save()
-            return redirect('budget')
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        driver_form = DriverForm()
+        if request.method == 'POST':
+            driver_form = DriverForm(request.POST)
+            if driver_form.is_valid():
+                driver_form.save()
+                return redirect('budget')
 
-    context = {'form': driver_form}
-    return render(request, 'new-driver.html', context)
+        context = {'form': driver_form, 'is_superuser': user.is_superuser}
+        return render(request, 'new-driver.html', context)
+    else:
+        return redirect('no-access')
 
-@api_view(['GET', 'PATCH'])
+@login_required(login_url='login')
+def archive(request):
+    user = User.objects.get(username = request.user)
+    drivers = Driver.objects.all()
+    if user.is_superuser:
+        queryset = Log.objects.all().order_by('-date')
+    else:
+        queryset = Log.objects.filter(user = user)
+
+    for query in queryset:
+        driver = drivers.get(id = query.driver_id)
+        query.name = driver.first_name + ' ' + driver.last_name
+
+    context = {'logs': queryset, 'is_superuser': user.is_superuser}
+    return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
+@api_view(['GET', 'POST'])
 def budget(request, id):
-    if request.method == 'GET':
+    # if request.method == 'GET':
+    #     try:
+    #         queryset = Driver.objects.get(pk = id)
+    #         serializer = DriverSerializer(queryset)
+    #         return Response(serializer.data)
+    #     except Driver.DoesNotExist:
+    #         return Response(status=status.HTTP_404_NOT_FOUND)
+    user = User.objects.get(username = request.user)
+
+    if request.method == 'POST':
         try:
-            queryset = Driver.objects.get(pk = id)
-            serializer = DriverSerializer(queryset)
-            return Response(serializer.data)
-        except Driver.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    elif request.method == 'PATCH':
-        try:
-            queryset = Driver.objects.get(pk =  id)
-            serializer = DriverSerializer(queryset, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(status=status.HTTP_200_OK)
+            driver = Driver.objects.get(pk=id)
+            if user.is_superuser or driver.dispatcher_id == user.id or driver.updater_id == user.id:
+                if request.data['bol_number'] != '' and request.data['pcs_number'] != '':
+                    amount = Decimal(request.data['amount'])
+                    b_type = request.data['budget_type']
+                    if b_type == 'D':
+                        driver.d_budget += amount
+                    elif b_type == 'L':
+                        driver.l_budget += amount
+                    elif b_type == 'R':
+                        driver.r_budget += amount
+                    driver.save()
+                    log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], user=request.user)
+                    log.save()
+                    return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
         except Driver.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

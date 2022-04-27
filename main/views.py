@@ -35,3 +35,6 @@ def logoutUser(request):
 @login_required(login_url='login')
 def home(request):
     return render(request, 'home.html')
+
+def noAccess(request):
+    return render(request, 'no-access.html')

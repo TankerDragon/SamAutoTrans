@@ -25,5 +25,6 @@ urlpatterns = [
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
     path('budget/', include('budget.urls')),
+    path('no-access/', views.noAccess, name='no-access')
     
 ]

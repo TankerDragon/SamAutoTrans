@@ -1,61 +1,80 @@
-#include<iostream.h>
-#include<conio.h>
-#include<stdio.h>
-#include<string.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
 
-class shape
+class Person
 {
+private:
+ string name;
+ int age;
 public:
-double h,ba;
+ void setdata(string name, int age){
+  this->name = name;
+  this->age = age;
+ }
+ void getdata(){
+  cout << "Name: " << name << endl;
+  cout << "Age: " << age << endl;
+ }
+ int get_age() {
+  return age;
+ }
+ string get_name() {
+  return name;
+ }
 
-shape()
-{
-h=0;
-ba=0;
-}
-
-void get_data()
-{
-cout<<"\nEnter h and ba to compute are :";
-cin>>h>>ba;
-}
-
-virtual void display_area()
-{
-}
 };
 
-class triangle : public shape
-{
-public:
 
-void display_area()
+int main()
 {
-cout<<h;
-cout<<"\nArea of triangle = "<<(h*ba)/2;
-}
-};
 
-class rectangle : public shape
-{
-public:
+ Person p;
+ string name;
+ int age, n;
 
-//redefining function display_area()
-void display_area()
-{
-cout<<"\nArea of rectangle = "<<h*ba;
-}
-};
-void main()
-{
-shape *s;
-triangle t;
-t.get_data();
-s=&t;
-s->display_area();
-rectangle r;
-r.get_data();
-s=&r;
-s->display_area();
-getch();
+ ofstream outfile;
+ outfile.open("Person.dat", ios::binary | ios::app);
+ cout << "Input name and age: "; cin >> name >> age; 
+ p.setdata(name, age); 
+ outfile.write((char*)&p, sizeof(p));
+ outfile.close();
+ ifstream infile;
+ infile.open("Person.dat", ios::binary);
+ infile.seekg(0, ios::beg);
+ while (infile.read((char*)&p, sizeof(p)))
+ {
+  p.getdata();
+ }
+ infile.close();
+
+    int a;
+ cout << "Enter the command: " << endl;
+ cout << "1. Determine the age of the specified person " << endl;
+ cout << "2. Determine the name if age is known" << endl;
+ cout << "3. Delete a record" << endl;
+ cout << "4. Add a record to a specific position" << endl;
+
+ cin >> a;
+ switch (a) {
+     case 1:
+         cout << "Enter the age: "; cin >> age;
+         ifstream infile;
+            infile.open("Person.dat", ios::binary);
+            infile.seekg(0, ios::beg);
+        while (infile.read((char*)&p, sizeof(p)))
+        {
+            if (p.get_age() == age) {
+                cout << p.get_name() << endl;
+            }
+
+        }
+        infile.close();
+
+        break;
+ }
+
+ system("pause");
+ return 0;
 }

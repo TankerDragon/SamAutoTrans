@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import Driver
+from django import forms
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -15,3 +16,6 @@ class DriverForm(ModelForm):
         model = Driver
         # ['user_id', 'cdl_number', 'vehicle_id', 'notes']
         fields = '__all__'
+
+class AmountChangeForm(ModelForm):
+    your_name = forms.CharField(label='Your name', max_length=100)

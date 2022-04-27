@@ -90,6 +90,7 @@ nav a {
 }
 .table {
   margin-top: 30px;
+  margin-bottom: 100px;
 }
 .table h1 {
   margin-bottom: 20px;
@@ -111,6 +112,7 @@ nav a {
 .table table thead tr {
   background-color: rgb(71, 90, 121);
 }
+
 .table table tbody tr:nth-child(odd) {
   background-color: rgb(227, 227, 227);
 }
@@ -122,6 +124,9 @@ nav a {
   font-weight: bold;
   font-size: 1rem;
   color: rgb(240, 212, 0);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .table table tbody .highLited i {
   background-color: rgb(77, 77, 77);
@@ -134,6 +139,9 @@ nav a {
 }
 .table table tbody .highLited i:hover {
   cursor: pointer;
+}
+.table table tbody .highLited i:last-child {
+  color: rgb(83, 206, 255);
 }
 #form {
   width: 40%;
@@ -170,7 +178,7 @@ nav a {
   background: transparent;
   border: 2px solid #727272;
   color: inherit;
-  border-radius: 10px;
+  border-radius: 5px;
   font-size: inherit;
   transition: 0.3s ease;
 }

@@ -6,5 +6,6 @@ urlpatterns = [
     path('users/', views.users, name='users'),
     path('new-user/', views.new_user, name='new-user'),
     path('new-driver/', views.new_driver, name='new-driver'),
+    path('archive/', views.archive, name='archive'),
     path('<int:id>', views.budget)
 ]
