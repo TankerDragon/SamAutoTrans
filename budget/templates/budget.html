@@ -27,7 +27,16 @@
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
           <td>{{driver.total_budget}}</td>
-          <td class="highLited"><i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i><i class="fa-solid fa-clock-rotate-left"></i></td>
+          <td class="highLited">
+            <i
+              class="fa-solid fa-dollar-sign"
+              onclick="modify(this, {{driver.id}})"
+            ></i>
+            <i
+              onclick="archive({{ driver.id }})"
+              class="fa-solid fa-clock-rotate-left"
+            ></i>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

@@ -33,7 +33,7 @@ def main(request):
     for query in queryset:
         query.total_budget = query.d_budget + query.l_budget + query.r_budget
     
-    context = {'drivers': queryset, 'is_superuser': user.is_superuser}
+    context = {'drivers': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
     return render(request, 'budget.html', context)
 
 @login_required(login_url='login')
@@ -41,7 +41,7 @@ def users(request):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
         queryset = User.objects.filter(is_superuser = 0)
-        context = {'users': queryset, 'is_superuser': user.is_superuser}
+        context = {'users': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
         return render(request, 'users.html', context)
     else:
         return redirect('no-access')
@@ -57,7 +57,7 @@ def new_user(request):
                 user_form.save()
                 return redirect('budget')
 
-        context = {'form': user_form, 'is_superuser': user.is_superuser}
+        context = {'form': user_form, 'is_superuser': user.is_superuser, 'user': request.user}
         return render(request, 'new-user.html', context)
     else:
         return redirect('no-access')
@@ -73,7 +73,7 @@ def new_driver(request):
                 driver_form.save()
                 return redirect('budget')
 
-        context = {'form': driver_form, 'is_superuser': user.is_superuser}
+        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
         return render(request, 'new-driver.html', context)
     else:
         return redirect('no-access')
@@ -91,7 +91,24 @@ def archive(request):
         driver = drivers.get(id = query.driver_id)
         query.name = driver.first_name + ' ' + driver.last_name
 
-    context = {'logs': queryset, 'is_superuser': user.is_superuser}
+    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
+    return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
+def driver_archive(request, id):
+    user = User.objects.get(username = request.user)
+    drivers = Driver.objects.filter(pk = id)
+
+    if user.is_superuser:
+        queryset = Log.objects.all().filter(driver_id = id).order_by('-date')
+    else:
+        queryset = Log.objects.filter(driver_id = id).filter(user = user).order_by('-date')
+
+    for query in queryset:
+        driver = drivers.get(id = query.driver_id)
+        query.name = driver.first_name + ' ' + driver.last_name
+
+    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')

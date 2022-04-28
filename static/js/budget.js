@@ -6,12 +6,17 @@ function modify(e, id) {
   // var this_row = e.parentElement.parentElement;
   // var rows = document.getElementById("tbody").children;
   // console.log(Array.prototype.indexOf.call(rows, this_row));
-  document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
+  document.getElementById(
+    "full-name"
+  ).innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
   console.log(e.parentElement.parentElement.children[0].innerText);
 
   disappeared = false;
   form.style.display = "block";
   form.classList.toggle("active");
+}
+function archive(id) {
+  location.href = "/budget/archive/" + id;
 }
 function submit() {
   fetch(current_driver, {
