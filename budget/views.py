@@ -74,9 +74,27 @@ def new_driver(request):
                 return redirect('budget')
 
         context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
-        return render(request, 'new-driver.html', context)
+        return render(request, 'driver.html', context)
     else:
         return redirect('no-access')
+
+@login_required(login_url='login')
+def driver_detail(request, id):
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        driver = Driver.objects.get(pk=id)
+        driver_form = DriverForm(instance=driver)
+        if request.method == 'POST':
+            driver_form = DriverForm(request.POST, instance=driver)
+            if driver_form.is_valid():
+                driver_form.save()
+                return redirect('budget')
+
+        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        return render(request, 'driver.html', context)
+    else:
+        return redirect('no-access')
+
 
 @login_required(login_url='login')
 def archive(request):
@@ -137,7 +155,7 @@ def budget(request, id):
                     elif b_type == 'R':
                         driver.r_budget += amount
                     driver.save()
-                    log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], user=request.user)
+                    log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
                     log.save()
                     return Response(status=status.HTTP_200_OK)
             else:

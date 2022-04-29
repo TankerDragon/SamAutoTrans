@@ -12,6 +12,7 @@ class Driver(models.Model):
     r_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True, null=True, default=0)
     first_name = models.CharField(max_length=20, null=True)
     last_name = models.CharField(max_length=20, null=True)
+    driver_type = models.CharField(max_length=2, choices=[('OO', 'Owner operator'), ('CD', 'Company driver'), ('LO', 'Lease operator')])
     is_active = models.BooleanField(default=1)
 
     def __str__(self):
@@ -25,3 +26,4 @@ class Log(models.Model):
     pcs_number = models.CharField(max_length=15)
     user = models.CharField(max_length=20)
     date = models.DateTimeField(auto_now=True)
+    note = models.CharField(max_length=100, blank=True)

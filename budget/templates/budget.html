@@ -8,6 +8,7 @@
       <thead>
         <td>First name</td>
         <td>Last name</td>
+        <td>Driver type</td>
         <td>Dispatcher</td>
         <td>Updater</td>
         <td>Driver's Budget</td>
@@ -21,6 +22,7 @@
         <tr>
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
+          <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
           <td>{{driver.dispatcher}}</td>
           <td>{{driver.updater}}</td>
           <td>{{driver.d_budget}}</td>
@@ -28,14 +30,9 @@
           <td>{{driver.r_budget}}</td>
           <td>{{driver.total_budget}}</td>
           <td class="highLited">
-            <i
-              class="fa-solid fa-dollar-sign"
-              onclick="modify(this, {{driver.id}})"
-            ></i>
-            <i
-              onclick="archive({{ driver.id }})"
-              class="fa-solid fa-clock-rotate-left"
-            ></i>
+            <i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i>
+            <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
+            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
           </td>
         </tr>
         {% endfor %}
@@ -61,6 +58,8 @@
     <input id="bol-number" type="text" />
     <label for="amount">PCS number:</label>
     <input id="pcs-number" type="text" />
+    <label for="amount">Note: </label>
+    <input id="note" type="text" />
     <div class="buttons">
       <button onclick="submit()">Submit</button>
       <button onclick="cancel()">Cancel</button>

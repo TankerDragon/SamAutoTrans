@@ -6,9 +6,7 @@ function modify(e, id) {
   // var this_row = e.parentElement.parentElement;
   // var rows = document.getElementById("tbody").children;
   // console.log(Array.prototype.indexOf.call(rows, this_row));
-  document.getElementById(
-    "full-name"
-  ).innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
+  document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
   console.log(e.parentElement.parentElement.children[0].innerText);
 
   disappeared = false;
@@ -17,6 +15,9 @@ function modify(e, id) {
 }
 function archive(id) {
   location.href = "/budget/archive/" + id;
+}
+function driver_detail(id) {
+  location.href = "/budget/driver-detail/" + id;
 }
 function submit() {
   fetch(current_driver, {
@@ -30,6 +31,7 @@ function submit() {
       budget_type: document.getElementById("budget-type").value,
       bol_number: document.getElementById("bol-number").value,
       pcs_number: document.getElementById("pcs-number").value,
+      note: document.getElementById("note").value,
     }),
   })
     .catch((error) => {
@@ -46,6 +48,7 @@ function submit() {
         document.getElementById("budget-type").value = "D";
         document.getElementById("bol-number").value = "";
         document.getElementById("pcs-number").value = "";
+        document.getElementById("note").value = "";
       }
       location.reload();
       cancel();

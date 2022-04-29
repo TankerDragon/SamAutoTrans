@@ -8,7 +8,7 @@ body {
   font-family: sans-serif;
 }
 .container {
-  width: 60%;
+  width: 70%;
   margin: auto;
 }
 nav {
@@ -106,10 +106,13 @@ nav a {
   padding: 10px 15px;
 }
 .table table thead {
+  white-space: nowrap;
   color: white;
   font-weight: bold;
 }
 .table table thead tr {
+  top: 80px;
+  position: sticky;
   background-color: rgb(71, 90, 121);
 }
 
@@ -129,6 +132,7 @@ nav a {
   justify-content: space-between;
 }
 .table table tbody .highLited i {
+  margin: 0 5px;
   background-color: rgb(77, 77, 77);
   width: 1.5rem;
   height: 1.5rem;
@@ -140,8 +144,11 @@ nav a {
 .table table tbody .highLited i:hover {
   cursor: pointer;
 }
-.table table tbody .highLited i:last-child {
+.table table tbody .highLited i:nth-child(2) {
   color: rgb(83, 206, 255);
+}
+.table table tbody .highLited i:last-child {
+  color: rgb(33, 221, 13);
 }
 #form {
   width: 40%;

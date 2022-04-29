@@ -8,5 +8,6 @@ urlpatterns = [
     path('new-driver/', views.new_driver, name='new-driver'),
     path('archive/', views.archive, name='archive'),
     path('archive/<int:id>', views.driver_archive),
+    path('driver-detail/<int:id>', views.driver_detail),
     path('<int:id>', views.budget)
 ]
