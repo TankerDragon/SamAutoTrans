@@ -2,7 +2,10 @@
 
 <div class="container">
   <div class="table">
-    <h1>Budget</h1>
+    <div class="row">
+      <h1>Budget</h1>
+      <input type="text" id="search-input" onkeyup="search()" placeholder="Search in table..." />
+    </div>
 
     <table>
       <thead>
@@ -23,8 +26,8 @@
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
           <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
-          <td>{{driver.dispatcher}}</td>
-          <td>{{driver.updater}}</td>
+          <td>{% if driver.dispatcher %}{{driver.dispatcher}}{% else %}-{%endif%}</td>
+          <td>{% if driver.dispatcher %}{{driver.updater}}{% else %}-{%endif%}</td>
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>

@@ -2,28 +2,37 @@
 
 <div class="container">
   <div class="table">
-    <h1>Budget</h1>
-
+    {% if many_drivers == True %}
+    <h1>All Archives</h1>
+    {% else %}
+    <h2>{{name}}</h2>
+    {% endif %}
     <table>
       <thead>
         <td>Change</td>
+        {% if many_drivers == True %}
         <td>Driver's name</td>
-        <td>Changed by</td>
+        {% endif %}
         <td>Budget type</td>
         <td>BOL number</td>
         <td>PCS number</td>
-        <td>Date and Time</td>
+        <td>Changed Time</td>
+        <td>Changed by</td>
+        <td>Notes</td>
       </thead>
       <tbody id="tbody">
         {% for log in logs %}
         <tr>
           <td>{{log.change}}</td>
+          {% if many_drivers == True %}
           <td>{{log.name}}</td>
-          <td>{{log.user}}</td>
-          <td>{% if log.budget_type == 'D' %} Driver's{% elif log.budget_type == 'L' %} Lane{% elif log.budget_type == 'R' %} Recovery{% endif %} Budget</td>
+          {% endif %}
+          <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% endif %} Budget</td>
           <td>{{log.bol_number}}</td>
           <td>{{log.pcs_number}}</td>
           <td>{{log.date}}</td>
+          <td>{{log.user}}</td>
+          <td>{{log.note}}</td>
         </tr>
         {% endfor %}
       </tbody>

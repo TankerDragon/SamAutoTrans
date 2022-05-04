@@ -24,12 +24,12 @@ from django.contrib.auth.decorators import login_required
 def main(request):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
-        queryset = Driver.objects.all()
+        queryset = Driver.objects.all().order_by('first_name')
     else:
         if user.user_type == 'D':
-            queryset = Driver.objects.filter(dispatcher_id = user.id)
+            queryset = Driver.objects.filter(dispatcher_id = user.id).order_by('first_name')
         elif user.user_type == 'U':
-            queryset = Driver.objects.filter(updater_id = user.id)
+            queryset = Driver.objects.filter(updater_id = user.id).order_by('first_name')
     for query in queryset:
         query.total_budget = query.d_budget + query.l_budget + query.r_budget
     
@@ -109,13 +109,13 @@ def archive(request):
         driver = drivers.get(id = query.driver_id)
         query.name = driver.first_name + ' ' + driver.last_name
 
-    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
+    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': True}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
 def driver_archive(request, id):
     user = User.objects.get(username = request.user)
-    drivers = Driver.objects.filter(pk = id)
+    driver = Driver.objects.get(pk = id)
 
     if user.is_superuser:
         queryset = Log.objects.all().filter(driver_id = id).order_by('-date')
@@ -123,10 +123,9 @@ def driver_archive(request, id):
         queryset = Log.objects.filter(driver_id = id).filter(user = user).order_by('-date')
 
     for query in queryset:
-        driver = drivers.get(id = query.driver_id)
         query.name = driver.first_name + ' ' + driver.last_name
 
-    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
+    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver.first_name + " " + driver.last_name}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')

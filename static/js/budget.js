@@ -69,3 +69,31 @@ function getCSRF() {
   arr = arr[1].split('"');
   return arr[1];
 }
+function search() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  var n = 0;
+  input = document.getElementById("search-input");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tbody");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+        //coloring background
+        // if (n % 2 == 0) {
+        //   tr[i].style.backgroundColor = "rgb(227, 227, 227)";
+        //   n++;
+        // }
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+search();
