@@ -123,7 +123,10 @@ nav a {
   background-color: rgb(71, 90, 121);
 }
 
-.table table tbody tr:nth-child(odd) {
+/* .table table tbody tr:nth-child(odd) {
+  background-color: rgb(227, 227, 227);
+} */
+.table table tbody tr.darker {
   background-color: rgb(227, 227, 227);
 }
 .table table tbody tr:hover {

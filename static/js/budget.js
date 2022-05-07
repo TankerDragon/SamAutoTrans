@@ -7,7 +7,7 @@ function modify(e, id) {
   // var rows = document.getElementById("tbody").children;
   // console.log(Array.prototype.indexOf.call(rows, this_row));
   document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
-  console.log(e.parentElement.parentElement.children[0].innerText);
+  // console.log(e.parentElement.parentElement.children[0].innerText);
 
   disappeared = false;
   form.style.display = "block";
@@ -69,10 +69,11 @@ function getCSRF() {
   arr = arr[1].split('"');
   return arr[1];
 }
+
 function search() {
   // Declare variables
   var input, filter, table, tr, td, i, txtValue;
-  var n = 0;
+  var odd = true;
   input = document.getElementById("search-input");
   filter = input.value.toUpperCase();
   table = document.getElementById("tbody");
@@ -80,16 +81,21 @@ function search() {
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
+    tr[i].classList = "";
+  }
+  for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[0];
     if (td) {
       txtValue = td.textContent || td.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
-        //coloring background
-        // if (n % 2 == 0) {
-        //   tr[i].style.backgroundColor = "rgb(227, 227, 227)";
-        //   n++;
-        // }
+
+        if (odd) {
+          odd = false;
+          tr[i].classList.toggle("darker");
+        } else {
+          odd = true;
+        }
       } else {
         tr[i].style.display = "none";
       }
