@@ -1,4 +1,4 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'eld-main.html' %} {% block content %}
 <div id="table">
   <div class="driver-edit">
     <h1>Vehicles</h1>
@@ -24,9 +24,7 @@
         <td>{{vehicle.is_active}}</td>
         <td>{{vehicle.notes}}</td>
         <td>
-          <a href="{% url 'edit-vehicle' vehicle.unit_number %}"
-            ><i class="fa-solid fa-pen"></i
-          ></a>
+          <a href="{% url 'edit-vehicle' vehicle.unit_number %}"><i class="fa-solid fa-pen"></i></a>
         </td>
       </tr>
 

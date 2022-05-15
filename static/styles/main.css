@@ -107,6 +107,38 @@ nav .categories a:hover {
 .login form button:hover {
   cursor: pointer;
 }
+.aplications {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  min-width: 50%;
+  min-height: 40%;
+  transform: translateX(-50%) translateY(-50%);
+  animation: bottom-to-top 2s forwards;
+}
+.aplications h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.aplications a {
+  text-align: center;
+  font-size: larger;
+  padding: 10px;
+  border-radius: 5px;
+  width: 60%;
+  margin: 10px auto;
+  display: block;
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  transition: 0.3s ease;
+}
+.aplications a:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: black;
+}
 /*  */
 @keyframes getDarker {
   0% {
@@ -133,11 +165,11 @@ nav .categories a:hover {
 @keyframes bottom-to-top {
   0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(100%);
+    transform: translateX(-50%) translateY(0%);
   }
   50% {
     opacity: 0;
-    transform: translateX(-50%) translateY(100%);
+    transform: translateX(-50%) translateY(0%);
   }
   100% {
     transform: translateX(-50%) translateY(-50%);
