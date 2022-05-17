@@ -81,12 +81,18 @@ WSGI_APPLICATION = 'samauto.wsgi.application'
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.mysql',
-        # 'HOST': 'localhost',
-        # 'USER': 'root',
-        # 'NAME': 'samauto',
-        # 'PASSWORD': '@akb21s4m$'
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #  'HOST': '5.182.26.11',
+        #  'USER': 'host1010_sam',
+        #  'NAME': 'host1010_datastore',
+        #  'PASSWORD': '@akb21s4m$'
+        
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'NAME': 'samauto',
+        'PASSWORD': '@akb21s4m$'
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 

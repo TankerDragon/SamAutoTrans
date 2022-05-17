@@ -2,7 +2,6 @@
 # fpdf.multi_cell(w: float, h: float, txt: str, border = 0, align: str = 'J', fill: bool = False)
 # fpdf.set_font(family, style = '', size = 0)
 # A4 is a paper size 210 millimeters wide and 297 millimeters long.
-from msilib.schema import tables
 from fpdf import FPDF
 
 data = (

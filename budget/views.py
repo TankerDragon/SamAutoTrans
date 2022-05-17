@@ -9,15 +9,6 @@ from .serializers import DriverSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 
-# class number:
-#     value = 0
-#     def get(self):
-#         return self.value
-    
-#     def increase(self):
-#         self.value += 1
-
-# n = number()
 
 # Create your views here.
 @login_required(login_url='login')
