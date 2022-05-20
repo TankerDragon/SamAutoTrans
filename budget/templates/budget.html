@@ -12,8 +12,6 @@
         <td>First name</td>
         <td>Last name</td>
         <td>Driver type</td>
-        <td>Dispatcher</td>
-        <td>Updater</td>
         <td>Driver's Budget</td>
         <td>Lane Budget</td>
         <td>Recovery Budget</td>
@@ -26,8 +24,6 @@
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
           <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
-          <td>{% if driver.dispatcher %}{{driver.dispatcher}}{% else %}-{%endif%}</td>
-          <td>{% if driver.dispatcher %}{{driver.updater}}{% else %}-{%endif%}</td>
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
@@ -36,6 +32,7 @@
             <i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i>
             <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
             <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-chart-line"></i>
           </td>
         </tr>
         {% endfor %}

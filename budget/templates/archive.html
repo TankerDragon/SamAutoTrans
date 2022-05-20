@@ -14,10 +14,11 @@
         <td>Driver's name</td>
         {% endif %}
         <td>Budget type</td>
-        <td>BOL number</td>
-        <td>PCS number</td>
         <td>Changed Time</td>
         <td>Changed by</td>
+        <td>BOL number</td>
+        <td>PCS number</td>
+
         <td>Notes</td>
       </thead>
       <tbody id="tbody">
@@ -28,10 +29,10 @@
           <td>{{log.name}}</td>
           {% endif %}
           <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% endif %} Budget</td>
-          <td>{{log.bol_number}}</td>
-          <td>{{log.pcs_number}}</td>
           <td>{{log.date}}</td>
           <td>{{log.user}}</td>
+          <td>{{log.bol_number}}</td>
+          <td>{{log.pcs_number}}</td>
           <td>{{log.note}}</td>
         </tr>
         {% endfor %}

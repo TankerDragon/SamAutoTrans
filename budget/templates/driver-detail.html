@@ -1,41 +1,30 @@
 {% extends 'budget-main.html' %} {% block content %}
 <div id="register">
-  <h1>New User Registration</h1>
+  <h1>Driver Settings</h1>
   <form method="POST">
     {% csrf_token %}
-    <div>
-      <label>{{form.username.label}}</label>
-      {{form.username}}
-    </div>
     <div>
       <label>{{form.first_name.label}}</label>
       {{form.first_name}}
     </div>
-
     <div>
       <label>{{form.last_name.label}}</label>
       {{form.last_name}}
     </div>
+
     <div>
-      <label>{{form.user_type.label}}</label>
-      {{form.user_type}}
+      <label>{{form.driver_type.label}}</label>
+      {{form.driver_type}}
     </div>
     <div>
       <label>{{form.is_active.label}}</label>
       {{form.is_active}}
     </div>
-    <div>
-      <label>{{form.password1.label}}</label>
-      {{form.password1}}
-    </div>
-    <div>
-      <label>{{form.password2.label}}</label>
-      {{form.password2}}
-    </div>
 
-    <input class="button" type="submit" value="Register" />
+    <input class="button" type="submit" value="Submit" />
     <span class="errors"></span>
     {{form.errors}}
   </form>
 </div>
+
 {% endblock %}

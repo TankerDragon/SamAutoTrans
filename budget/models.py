@@ -1,12 +1,19 @@
 from lib2to3.pgen2 import driver
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 
 
 # Create your models here.
+# class Staff(models.Model):
+#     first_name = models.CharField(max_length=20, null=True)
+#     last_name = models.CharField(max_length=20, null=True)
+#     username = models.CharField(max_length=20, unique=True)
+#     user_type = models.CharField(max_length=1, choices=[('D', 'dispatcher'), ('U', 'updater')], default='U')
+#     password = models.CharField(max_length=12)
+#     is_active = models.BooleanField(default=1)
+
 class Driver(models.Model):
-    dispatcher = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='dispatcher', blank=True)
-    updater = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updater', blank=True)
     d_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True, null=True, default=0)
     l_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True, null=True, default=0)
     r_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True, null=True, default=0)
@@ -17,6 +24,10 @@ class Driver(models.Model):
 
     def __str__(self):
         return self.first_name
+
+class Staff_driver_group(models.Model):
+    staff = models.ForeignKey(User, on_delete=models.CASCADE)
+    driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
 
 class Log(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)

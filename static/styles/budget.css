@@ -136,10 +136,8 @@ nav a {
 .table table tbody .highLited {
   font-weight: bold;
   font-size: 1rem;
-  color: rgb(240, 212, 0);
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 .table table tbody .highLited i {
   margin: 0 5px;
@@ -152,14 +150,21 @@ nav a {
   justify-content: center;
   transition: 0.1s ease;
 }
+
 .table table tbody .highLited i:hover {
   cursor: pointer;
 }
-.table table tbody .highLited i:nth-child(2) {
+.table table tbody .highLited i.fa-dollar-sign {
+  color: rgb(240, 212, 0);
+}
+.table table tbody .highLited i.fa-clock-rotate-left {
   color: rgb(83, 206, 255);
 }
-.table table tbody .highLited i:last-child {
+.table table tbody .highLited i.fa-user {
   color: rgb(33, 221, 13);
+}
+.table table tbody .highLited i.fa-chart-line {
+  color: rgb(243, 150, 0);
 }
 .table table tbody .highLited i:active {
   background-color: rgb(168, 168, 168);

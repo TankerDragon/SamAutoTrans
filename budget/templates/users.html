@@ -11,6 +11,7 @@
         <td>User Type</td>
         <td>Last Login</td>
         <td>Date Joined</td>
+        <td>Actions</td>
       </thead>
       <tbody>
         {% for user in users %}
@@ -21,6 +22,10 @@
           <td>{% if user.user_type == 'D' %}Dispatcher{% elif user.user_type == 'U' %}Updater{% endif %}</td>
           <td>{{user.last_login}}</td>
           <td>{{user.date_joined}}</td>
+          <td class="highLited">
+            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+            <i class="fa-solid fa-chart-line"></i>
+          </td>
         </tr>
         {% endfor %}
       </tbody>

@@ -54,6 +54,23 @@ def new_user(request):
         return redirect('no-access')
 
 @login_required(login_url='login')
+def user_detail(request, id):
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        driver = Driver.objects.get(pk=id)
+        driver_form = DriverForm(instance=driver)
+        if request.method == 'POST':
+            driver_form = DriverForm(request.POST, instance=driver)
+            if driver_form.is_valid():
+                driver_form.save()
+                return redirect('budget')
+
+        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        return render(request, 'user-detail.html', context)
+    else:
+        return redirect('no-access')
+
+@login_required(login_url='login')
 def new_driver(request):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
@@ -65,7 +82,7 @@ def new_driver(request):
                 return redirect('budget')
 
         context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
-        return render(request, 'driver.html', context)
+        return render(request, 'new-driver.html', context)
     else:
         return redirect('no-access')
 
@@ -82,7 +99,7 @@ def driver_detail(request, id):
                 return redirect('budget')
 
         context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
-        return render(request, 'driver.html', context)
+        return render(request, 'driver-detail.html', context)
     else:
         return redirect('no-access')
 
