@@ -117,9 +117,11 @@ nav a {
   color: white;
   font-weight: bold;
 }
-.table table thead tr {
+.sticky tr {
   top: 80px;
   position: sticky;
+}
+.table table thead tr {
   background-color: rgb(71, 90, 121);
 }
 
