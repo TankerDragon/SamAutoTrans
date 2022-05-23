@@ -49,9 +49,11 @@ function submit() {
         document.getElementById("bol-number").value = "";
         document.getElementById("pcs-number").value = "";
         document.getElementById("note").value = "";
+        //
+        cancel();
+        location.reload();
       }
-      location.reload();
-      cancel();
+      
     });
 }
 function cancel() {

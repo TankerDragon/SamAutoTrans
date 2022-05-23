@@ -1,6 +1,5 @@
-    dis_id = models.IntegerField()
-    upd_id = models.IntegerField()
-    d_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True)
-    l_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True)
-    r_budget = models.DecimalField(max_digits=9,decimal_places=2, blank=True)
-    user_type = models.CharField(max_length=3, choices=[('DRI', 'driver'),('DIS', 'dispatcher'), ('UPD', 'updater')], default='DRI')
+import datetime
+
+a = datetime(2022, 10, 22)
+a -= 5
+print(a)

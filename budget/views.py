@@ -1,3 +1,5 @@
+from calendar import week
+from re import L
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -8,23 +10,85 @@ from django.contrib.auth.models import User
 from .serializers import DriverSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 # Create your views here.
 @login_required(login_url='login')
 def main(request):
     user = User.objects.get(username = request.user)
-    if user.is_superuser:
-        queryset = Driver.objects.all().order_by('first_name')
-    else:
-        if user.user_type == 'D':
-            queryset = Driver.objects.filter(dispatcher_id = user.id).order_by('first_name')
-        elif user.user_type == 'U':
-            queryset = Driver.objects.filter(updater_id = user.id).order_by('first_name')
+    queryset = Driver.objects.all().order_by('first_name')
+    l_total = 0
+    d_total = 0
+    r_total = 0
     for query in queryset:
         query.total_budget = query.d_budget + query.l_budget + query.r_budget
+        l_total += query.l_budget
+        d_total += query.d_budget
+        r_total += query.r_budget
+
+    ##################
+    data = {
+        "week": {
+            "D" : 0,
+            "L" : 0,
+            "R" : 0,
+        },
+        "month": {
+            "D" : 0,
+            "L" : 0,
+            "R" : 0,
+        },
+        "year": {
+            "D" : 0,
+            "L" : 0,
+            "R" : 0,
+        }
+    }
+    archives = Log.objects.all().order_by('date')
+    today = datetime.datetime.today()
+    week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
+    month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
+    year_before = datetime.datetime.strftime(today - datetime.timedelta(days = 365) , '%Y-%m-%d')
+    # print(week_before)
+    # print(month_before)
+    # print(year_before)
+
+    week = archives.filter(date__gte = week_before)
+    month = archives.filter(date__gte = month_before)
+    year = archives.filter(date__gte = year_before)
+    # print (week)
+
+    for  i in week:
+        data['week'][i.budget_type] += i.change
+    for  i in month:
+        data['month'][i.budget_type] += i.change
+    for  i in year:
+        data['year'][i.budget_type] += i.change
     
-    context = {'drivers': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
+    print(data)
+
+
+        # if user.user_type == 'D':
+        #     queryset = Driver.objects.filter(dispatcher_id = user.id).order_by('first_name')
+        # elif user.user_type == 'U':
+        #     queryset = Driver.objects.filter(updater_id = user.id).order_by('first_name')
+   
+    
+    # week = 0
+    # w = queryset.filter(date__gte = '2022-22-05', date__lte = '2022-22-05')
+    # for i in w:
+    #     print (i)
+
+    context = {
+        'drivers': queryset,
+        'lane': l_total,
+        'driver': d_total,
+        'recovery': r_total,
+        'total':l_total + d_total + r_total, 
+        'is_superuser': user.is_superuser, 
+        'user': request.user
+        }
     return render(request, 'budget.html', context)
 
 @login_required(login_url='login')

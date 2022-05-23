@@ -90,7 +90,8 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'root',
         'NAME': 'samauto',
-        'PASSWORD': '@akb21s4m$'
+        # 'PASSWORD': '@akb21s4m$'
+        'PASSWORD': 'dragondD8090'
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -121,11 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
