@@ -53,7 +53,6 @@ function submit() {
         cancel();
         location.reload();
       }
-      
     });
 }
 function cancel() {
@@ -74,7 +73,7 @@ function getCSRF() {
 
 function search() {
   // Declare variables
-  var input, filter, table, tr, td, i, txtValue;
+  var input, filter, table, tr, td1, td2, i, txtValue;
   var odd = true;
   input = document.getElementById("search-input");
   filter = input.value.toUpperCase();
@@ -86,9 +85,10 @@ function search() {
     tr[i].classList = "";
   }
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
+    td1 = tr[i].getElementsByTagName("td")[0];
+    td2 = tr[i].getElementsByTagName("td")[1];
+    if (td1 || td2) {
+      txtValue = td1.innerText + td2.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
 

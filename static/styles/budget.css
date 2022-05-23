@@ -27,6 +27,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 15px;
+  z-index: 10;
 }
 nav .categories {
   font-size: 1.3rem;
@@ -120,6 +121,7 @@ nav a {
 .sticky tr {
   top: 80px;
   position: sticky;
+  z-index: 10;
 }
 .table table thead tr {
   background-color: rgb(71, 90, 121);
@@ -250,7 +252,28 @@ nav a {
   border: 1px solid #ddd; /* Add a grey border */
   margin-bottom: 12px; /* Add some space below the input */
 }
-
+#chartContainer {
+  width: 45%;
+  border: 1px solid black;
+  margin-left: 50px;
+  margin-bottom: 20px;
+}
+.canvasjs-chart-credit {
+  display: none;
+}
+.table-container {
+  width: 55%;
+}
+tbody.first-bold tr td:first-child {
+  font-weight: bold;
+}
+tbody.first-bold tr td:nth-child(2) {
+  background-color: rgb(227, 227, 227);
+  text-align: right;
+}
+tbody.first-bold tr:hover td:nth-child(2) {
+  background-color: rgb(116, 131, 155);
+}
 @keyframes appear {
   0% {
     opacity: 0;

@@ -33,16 +33,19 @@ def main(request):
             "D" : 0,
             "L" : 0,
             "R" : 0,
+            "T" : 0
         },
         "month": {
             "D" : 0,
             "L" : 0,
             "R" : 0,
+            "T" : 0
         },
         "year": {
             "D" : 0,
             "L" : 0,
             "R" : 0,
+            "T" : 0
         }
     }
     archives = Log.objects.all().order_by('date')
@@ -61,12 +64,14 @@ def main(request):
 
     for  i in week:
         data['week'][i.budget_type] += i.change
+        data['week']['T'] += i.change
     for  i in month:
         data['month'][i.budget_type] += i.change
+        data['month']['T'] += i.change
     for  i in year:
         data['year'][i.budget_type] += i.change
+        data['year']['T'] += i.change
     
-    print(data)
 
 
         # if user.user_type == 'D':
@@ -82,12 +87,13 @@ def main(request):
 
     context = {
         'drivers': queryset,
-        'lane': l_total,
-        'driver': d_total,
-        'recovery': r_total,
+        'l_total': l_total,
+        'd_total': d_total,
+        'r_total': r_total,
         'total':l_total + d_total + r_total, 
         'is_superuser': user.is_superuser, 
-        'user': request.user
+        'user': request.user,
+        'data': data
         }
     return render(request, 'budget.html', context)
 

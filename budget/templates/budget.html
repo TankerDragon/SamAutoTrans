@@ -2,50 +2,58 @@
 
 <div class="container">
   <div class="table">
-    <table>
-      <thead>
-        <tr>
-          <td>Budget type</td>
-          <td>Week</td>
-          <td>Month</td>
-          <td>Year</td>
-          <td>All time</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Lane Budged</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Driver Budged</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Recovery Budged</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="row">
+      <div class="table-container">
+        <h1>Budget statistics</h1>
+        <table>
+          <thead>
+            <tr>
+              <td>Budget type</td>
+              <td>Total Amount</td>
+              <td>Weekly change</td>
+              <td>Monthly change</td>
+              <td>Yearly change</td>
+            </tr>
+          </thead>
+          <tbody class="first-bold">
+            <tr>
+              <td>Lane Budget</td>
+              <td>{{l_total}}<d_total + r_total/td></td>
+              <td>{{data.week.L}}</td>
+              <td>{{data.month.L}}</td>
+              <td>{{data.year.L}}</td>
+            </tr>
+            <tr>
+              <td>Driver Budget</td>
+              <td>{{d_total}}</td>
+              <td>{{data.week.D}}</td>
+              <td>{{data.month.D}}</td>
+              <td>{{data.year.D}}</td>
+            </tr>
+            <tr>
+              <td>Recovery Budget</td>
+              <td>{{r_total}}</td>
+              <td>{{data.week.R}}</td>
+              <td>{{data.month.R}}</td>
+              <td>{{data.year.R}}</td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td>{{total}}</td>
+              <td>{{data.week.T}}</td>
+              <td>{{data.month.T}}</td>
+              <td>{{data.year.T}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="chartContainer" style="height: 370px"></div>
+    </div>
+
     <div class="row">
       <h1>Budget</h1>
-      <input type="text" id="search-input" onkeyup="search()" placeholder="Search in table..." />
+      <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
     </div>
     <table>
       <thead class="sticky">
@@ -107,5 +115,36 @@
   </div>
 </div>
 <script src="{% static 'js/budget.js' %}"></script>
+<script src="{% static 'js/lib/canvasjs.min.js' %}"></script>
+
+<script>
+  let l_total = {{l_total}}, d_total = {{d_total}}, r_total = {{r_total}}, total = {{total}};
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      title: {
+        text: "Total Amount",
+        horizontalAlign: "center",
+      },
+      data: [
+        {
+          theme: "dark2",
+          type: "doughnut",
+          startAngle: 60,
+          innerRadius: 60,
+          indexLabelFontSize: 17,
+          indexLabel: "{label} - #percent%",
+          toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+          dataPoints: [
+            { y: total/l_total, label: "Lane Budget" },
+            { y: total/d_total, label: "Driver Budget" },
+            { y: total/r_total, label: "Recovery Budget" },
+          ],
+        },
+      ],
+    });
+    chart.render();
+  };
+</script>
 
 {% endblock %}

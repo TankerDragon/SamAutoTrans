@@ -25,7 +25,7 @@ class Driver(models.Model):
     def __str__(self):
         return self.first_name
 
-class Staff_driver_group(models.Model):
+class Group(models.Model):
     staff = models.ForeignKey(User, on_delete=models.CASCADE)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE)
 
