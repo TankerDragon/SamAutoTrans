@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from .models import Driver
 from django import forms
 
-class CreateUserForm(UserCreationForm):
+class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','first_name',

@@ -19,6 +19,15 @@ function archive(id) {
 function driver_detail(id) {
   location.href = "/budget/driver-detail/" + id;
 }
+function user_detail(id) {
+  location.href = "/budget/user-detail/" + id;
+}
+function deactivate_driver(id) {
+  location.href = "/budget/deactivate-driver/" + id;
+}
+function activate_driver(id) {
+  location.href = "/budget/activate-driver/" + id;
+}
 function submit() {
   fetch(current_driver, {
     method: "POST",

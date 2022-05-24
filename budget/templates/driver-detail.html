@@ -20,11 +20,79 @@
       <label>{{form.is_active.label}}</label>
       {{form.is_active}}
     </div>
+    <div>
+      <label>Add Dispatcher</label>
+      <select name="add_d" id="add_user">
+        <option value="" selected="">---------</option>
+        {% for dispatcher in dispatchers %}
+        <option value="{{dispatcher.username}}">{{dispatcher.username}}</option>
+        {%endfor%}
+      </select>
+    </div>
+    <div>
+      <label>Add Updater</label>
+      <select name="add_u" id="add_user">
+        <option value="" selected="">---------</option>
+        {% for updater in updaters %}
+        <option value="{{updater.username}}">{{updater.username}}</option>
+        {%endfor%}
+      </select>
+    </div>
 
     <input class="button" type="submit" value="Submit" />
     <span class="errors"></span>
     {{form.errors}}
   </form>
+  <div>
+    <div class="table">
+      <h3>Dispatchers</h3>
+      <table>
+        <thead>
+          <td>First name</td>
+          <td>Last name</td>
+          <td>Username</td>
+          <td>Actions</td>
+        </thead>
+        <tbody>
+          {% for cloned_user in cloned_users %} {% if cloned_user.user_type == 'D' %}
+          <tr>
+            <td>{{cloned_user.first_name}}</td>
+            <td>{{cloned_user.last_name}}</td>
+            <td>{{cloned_user.username}}</td>
+            <td class="highLited">
+              <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+              <i class="fa-solid fa-chart-line"></i>
+            </td>
+          </tr>
+          {% endif %} {%endfor%}
+        </tbody>
+      </table>
+    </div>
+    <div class="table">
+      <h3>Updaters</h3>
+      <table>
+        <thead>
+          <td>First name</td>
+          <td>Last name</td>
+          <td>Username</td>
+          <td>Actions</td>
+        </thead>
+        <tbody>
+          {% for cloned_user in cloned_users %} {% if cloned_user.user_type == 'U' %}
+          <tr>
+            <td>{{cloned_user.first_name}}</td>
+            <td>{{cloned_user.last_name}}</td>
+            <td>{{cloned_user.username}}</td>
+            <td class="highLited">
+              <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+              <i class="fa-solid fa-chart-line"></i>
+            </td>
+          </tr>
+          {% endif %} {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -1,101 +1,107 @@
 from calendar import week
 from re import L
+from turtle import update
 from django.shortcuts import render, redirect
+from requests import request
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from budget.models import Driver, Log
-from .forms import CreateUserForm, DriverForm
+from budget.models import Driver, Log, Group
+from .forms import UserForm, DriverForm
 from django.contrib.auth.models import User
 from .serializers import DriverSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 import datetime
 
+#funtions 
 
 # Create your views here.
 @login_required(login_url='login')
 def main(request):
     user = User.objects.get(username = request.user)
-    queryset = Driver.objects.all().order_by('first_name')
-    l_total = 0
-    d_total = 0
-    r_total = 0
-    for query in queryset:
-        query.total_budget = query.d_budget + query.l_budget + query.r_budget
-        l_total += query.l_budget
-        d_total += query.d_budget
-        r_total += query.r_budget
+    if user.is_superuser:
+        queryset = Driver.objects.all().order_by('first_name')
+        l_total = 0
+        d_total = 0
+        r_total = 0
+        for query in queryset:
+            query.total_budget = query.d_budget + query.l_budget + query.r_budget
+            l_total += query.l_budget
+            d_total += query.d_budget
+            r_total += query.r_budget
 
-    ##################
-    data = {
-        "week": {
-            "D" : 0,
-            "L" : 0,
-            "R" : 0,
-            "T" : 0
-        },
-        "month": {
-            "D" : 0,
-            "L" : 0,
-            "R" : 0,
-            "T" : 0
-        },
-        "year": {
-            "D" : 0,
-            "L" : 0,
-            "R" : 0,
-            "T" : 0
+        ##################
+        data = {
+            "week": {
+                "D" : 0,
+                "L" : 0,
+                "R" : 0,
+                "T" : 0
+            },
+            "month": {
+                "D" : 0,
+                "L" : 0,
+                "R" : 0,
+                "T" : 0
+            },
+            "year": {
+                "D" : 0,
+                "L" : 0,
+                "R" : 0,
+                "T" : 0
+            }
         }
-    }
-    archives = Log.objects.all().order_by('date')
-    today = datetime.datetime.today()
-    week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
-    month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
-    year_before = datetime.datetime.strftime(today - datetime.timedelta(days = 365) , '%Y-%m-%d')
-    # print(week_before)
-    # print(month_before)
-    # print(year_before)
+        archives = Log.objects.all().order_by('date')
+        today = datetime.datetime.today()
+        week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
+        month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
+        year_before = datetime.datetime.strftime(today - datetime.timedelta(days = 365) , '%Y-%m-%d')
+        # print(week_before)
+        # print(month_before)
+        # print(year_before)
 
-    week = archives.filter(date__gte = week_before)
-    month = archives.filter(date__gte = month_before)
-    year = archives.filter(date__gte = year_before)
-    # print (week)
+        week = archives.filter(date__gte = week_before)
+        month = archives.filter(date__gte = month_before)
+        year = archives.filter(date__gte = year_before)
+        # print (week)
 
-    for  i in week:
-        data['week'][i.budget_type] += i.change
-        data['week']['T'] += i.change
-    for  i in month:
-        data['month'][i.budget_type] += i.change
-        data['month']['T'] += i.change
-    for  i in year:
-        data['year'][i.budget_type] += i.change
-        data['year']['T'] += i.change
-    
+        for  i in week:
+            data['week'][i.budget_type] += i.change
+            data['week']['T'] += i.change
+        for  i in month:
+            data['month'][i.budget_type] += i.change
+            data['month']['T'] += i.change
+        for  i in year:
+            data['year'][i.budget_type] += i.change
+            data['year']['T'] += i.change
+        
+
+        context = {
+            'drivers': queryset,
+            'l_total': l_total,
+            'd_total': d_total,
+            'r_total': r_total,
+            'total':l_total + d_total + r_total, 
+            'is_superuser': user.is_superuser, 
+            'user': request.user,
+            'data': data
+            }
+        return render(request, 'budget.html', context)
+    else:
+        cloned_drivers_id = Group.objects.filter(staff_id = user.id)
+        list_of_ids = []
+        for i in cloned_drivers_id:
+            list_of_ids.append(i.driver_id)
+        queryset = Driver.objects.filter(id__in = list_of_ids).order_by('first_name')
+        context = {
+            'drivers': queryset, 
+            'is_superuser': user.is_superuser, 
+            'user': request.user,
+            }
+        return render(request, 'budget.html', context)
 
 
-        # if user.user_type == 'D':
-        #     queryset = Driver.objects.filter(dispatcher_id = user.id).order_by('first_name')
-        # elif user.user_type == 'U':
-        #     queryset = Driver.objects.filter(updater_id = user.id).order_by('first_name')
-   
-    
-    # week = 0
-    # w = queryset.filter(date__gte = '2022-22-05', date__lte = '2022-22-05')
-    # for i in w:
-    #     print (i)
-
-    context = {
-        'drivers': queryset,
-        'l_total': l_total,
-        'd_total': d_total,
-        'r_total': r_total,
-        'total':l_total + d_total + r_total, 
-        'is_superuser': user.is_superuser, 
-        'user': request.user,
-        'data': data
-        }
-    return render(request, 'budget.html', context)
 
 @login_required(login_url='login')
 def users(request):
@@ -111,9 +117,9 @@ def users(request):
 def new_user(request):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
-        user_form = CreateUserForm()
+        user_form = UserForm()
         if request.method == 'POST':
-            user_form = CreateUserForm(request.POST)
+            user_form = UserForm(request.POST)
             if user_form.is_valid():
                 user_form.save()
                 return redirect('budget')
@@ -127,15 +133,19 @@ def new_user(request):
 def user_detail(request, id):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
-        driver = Driver.objects.get(pk=id)
-        driver_form = DriverForm(instance=driver)
+        u = User.objects.get(pk=id)
+        user_form = UserForm(instance=u)
         if request.method == 'POST':
-            driver_form = DriverForm(request.POST, instance=driver)
-            if driver_form.is_valid():
-                driver_form.save()
+            user_form = UserForm(request.POST, instance=u)
+            if user_form.is_valid():
+                user_form.save()
                 return redirect('budget')
 
-        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        context = {
+            'form': user_form, 
+            'is_superuser': user.is_superuser, 
+            'user': request.user
+            }
         return render(request, 'user-detail.html', context)
     else:
         return redirect('no-access')
@@ -160,15 +170,53 @@ def new_driver(request):
 def driver_detail(request, id):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
+        users = User.objects.filter(is_superuser = 0)
+        print('users', users)
+        dispatchers = users.filter(user_type = 'D')
+        updaters = users.filter(user_type = 'U')
+        cloned_users_id = Group.objects.filter(driver_id = id)
+        list_of_ids = []
+        for i in cloned_users_id:
+            list_of_ids.append(i.staff_id)
+
+        cloned_users = users.filter(id__in = list_of_ids)
+        
         driver = Driver.objects.get(pk=id)
         driver_form = DriverForm(instance=driver)
         if request.method == 'POST':
+            dic = request.POST.dict()
+            if dic['add_d'] != '':
+                d = dispatchers.get(username = dic['add_d'])
+                if cloned_users_id.filter(staff_id = d.id).exists():
+                    print("exists")
+                else:
+                    new_g = Group()
+                    new_g.driver_id = id
+                    new_g.staff_id = d.id
+                    new_g.save()
+            if dic['add_u'] != '':
+                u = updaters.get(username = dic['add_u'])
+                if cloned_users_id.filter(staff_id = u.id).exists():
+                    print("exists")
+                else:
+                    new_g = Group()
+                    new_g.driver_id = id
+                    new_g.staff_id = u.id
+                    new_g.save()
+            ####
             driver_form = DriverForm(request.POST, instance=driver)
             if driver_form.is_valid():
                 driver_form.save()
                 return redirect('budget')
 
-        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        context = {
+            'form': driver_form,
+            'is_superuser': user.is_superuser, 
+            'user': request.user, 
+            'dispatchers': dispatchers,
+            'updaters': updaters,
+            'cloned_users': cloned_users
+            }
         return render(request, 'driver-detail.html', context)
     else:
         return redirect('no-access')
@@ -205,6 +253,31 @@ def driver_archive(request, id):
 
     context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver.first_name + " " + driver.last_name}
     return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
+def deactivate_driver(request, id):
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        driver = Driver.objects.get(pk = id)
+        driver.is_active = 0
+        driver.save()
+    else:
+        return redirect('no-access')
+    return redirect('budget')
+
+@login_required(login_url='login')
+def activate_driver(request, id):
+    user = User.objects.get(username = request.user)
+    if user.is_superuser:
+        driver = Driver.objects.get(pk = id)
+        driver.is_active = 1
+        driver.save()
+    else:
+        return redirect('no-access')
+    return redirect('budget')
+
+
+
 
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])

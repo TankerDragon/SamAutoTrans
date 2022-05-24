@@ -23,7 +23,7 @@
           <td>{{user.last_login}}</td>
           <td>{{user.date_joined}}</td>
           <td class="highLited">
-            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+            <i onclick="user_detail({{ user.id }})" class="fa-solid fa-user"></i>
             <i class="fa-solid fa-chart-line"></i>
           </td>
         </tr>
@@ -32,5 +32,9 @@
     </table>
   </div>
 </div>
-
+<script>
+  function user_detail(id) {
+    location.href = "/budget/user-detail/" + id;
+  }
+</script>
 {% endblock %}

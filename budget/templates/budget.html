@@ -2,6 +2,7 @@
 
 <div class="container">
   <div class="table">
+    {% if is_superuser %}
     <div class="row">
       <div class="table-container">
         <h1>Budget statistics</h1>
@@ -50,7 +51,7 @@
 
       <div id="chartContainer" style="height: 370px"></div>
     </div>
-
+    {% endif %}
     <div class="row">
       <h1>Budget</h1>
       <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
@@ -67,7 +68,7 @@
         <td>Actions</td>
       </thead>
       <tbody id="tbody">
-        {% for driver in drivers %}
+        {% for driver in drivers %} {% if driver.is_active %}
         <tr>
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
@@ -79,13 +80,50 @@
           <td class="highLited">
             <i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i>
             <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
+            {% if is_superuser %}
             <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
-            <i class="fa-solid fa-chart-line"></i>
+            <i onclick="deactivate_driver({{ driver.id }})" class="fa-solid fa-xmark"></i>
+            {% endif %}
           </td>
         </tr>
-        {% endfor %}
+        {%endif%} {% endfor %}
       </tbody>
     </table>
+    {% if is_superuser %}
+    <div class="row">
+      <h1>Deactivated</h1>
+    </div>
+    <table>
+      <thead class="sticky">
+        <td>First name</td>
+        <td>Last name</td>
+        <td>Driver type</td>
+        <td>Driver's Budget</td>
+        <td>Lane Budget</td>
+        <td>Recovery Budget</td>
+        <td>Total Budget</td>
+        <td>Actions</td>
+      </thead>
+      <tbody id="tbody">
+        {% for driver in drivers %} {% if driver.is_active == 0 %}
+        <tr>
+          <td>{{driver.first_name}}</td>
+          <td>{{driver.last_name}}</td>
+          <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
+          <td>{{driver.d_budget}}</td>
+          <td>{{driver.l_budget}}</td>
+          <td>{{driver.r_budget}}</td>
+          <td>{{driver.total_budget}}</td>
+          <td class="highLited">
+            <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
+            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
+            <i onclick="activate_driver({{ driver.id }})" class="fa-solid fa-recycle"></i>
+          </td>
+        </tr>
+        {%endif%} {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
   </div>
 </div>
 <div id="form">
