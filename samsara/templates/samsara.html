@@ -1,0 +1,25 @@
+{% extends 'samsara-main.html' %} {% block content %} {% load static %}
+
+<div class="container">
+  <div class="table">
+    <div class="row">
+      <h1>Informations</h1>
+    </div>
+    <table>
+      <thead>
+        <td>ID</td>
+        <td>Unit</td>
+        <td>Odometer</td>
+        <td>Latitude</td>
+        <td>Longitude</td>
+        <td>Speed</td>
+        <td>Location</td>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="{% static 'js/samsara.js' %}"></script>
+
+{% endblock %}

@@ -26,6 +26,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('budget/', include('budget.urls')),
     path('eld/', include('eld.urls')),
+    path('samsara/', include('samsara.urls')),
     path('no-access/', views.noAccess, name='no-access')
     
 ]
