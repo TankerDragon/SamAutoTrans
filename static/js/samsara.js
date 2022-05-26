@@ -1,3 +1,19 @@
+function bell(id, icon) {
+  if (icon.classList.value == "fa-solid fa-bell-slash") {
+    icon.classList.value = "fa-solid fa-bell";
+    post(id, true);
+  } else {
+    icon.classList.value = "fa-solid fa-bell-slash";
+    post(id, false);
+  }
+}
+// function lock(id, lock) {
+//   if (lock.classList.value == "fa-solid fa-lock-open") {
+//     lock.classList.value = "fa-solid fa-lock";
+//   } else {
+//     lock.classList.value = "fa-solid fa-lock-open";
+//   }
+// }
 function getCSRF() {
   arr = document.getElementById("csrf").innerHTML.split("value");
   arr = arr[1].split('"');
@@ -7,14 +23,17 @@ function update(data) {
   body = "";
   for (let i = 0; i < data.length; i++) {
     body += `
-    <tr>
-      <td>${data[i].id}</td>
+    <tr${data[i].speed != 0 ? " class='light-yellow'" : ""}>
+      <td>n</td>
       <td>${data[i].name}</td>
       <td>${Math.round(data[i].odometer * 0.000621371)}</td>
       <td>${data[i].latitude}</td>
       <td>${data[i].longitude}</td>
       <td>${data[i].speed}</td>
       <td>${data[i].location}</td>
+      <td  class="highLited">
+        <i class="fa-solid fa-bell${data[i].alarm ? "" : "-slash"}" onclick="bell(${data[i].id}, this)"></i>
+      </td>
     </tr>
     `;
     // console.log(data[i]);
@@ -33,6 +52,30 @@ function get() {
 get();
 setInterval(get, 5000);
 
+function post(id, alarm) {
+  fetch("/samsara/get-data/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCSRF(),
+    },
+    body: JSON.stringify({
+      id: id,
+      alarm: alarm,
+    }),
+  })
+    .catch((error) => {
+      console.log("ERROR", error);
+      window.alert(error);
+    })
+
+    .then((data) => {
+      console.log("DATA_OK?: ", data);
+      if (data.status != 200) {
+        window.alert("Uncompleted Submit!!!");
+      }
+    });
+}
 ///
 function sortTable() {
   var table, rows, switching, i, x, y, shouldSwitch;
@@ -44,7 +87,7 @@ function sortTable() {
     //start by saying: no switching is done:
     switching = false;
     rows = table.rows;
-    console.log(table.rows);
+    // console.log(table.rows);
     /*Loop through all table rows (except the
     first, which contains table headers):*/
     for (i = 0; i < rows.length - 1; i++) {
@@ -52,6 +95,7 @@ function sortTable() {
       shouldSwitch = false;
       /*Get the two elements you want to compare,
       one from current row and one from the next:*/
+
       x = rows[i].getElementsByTagName("TD")[1];
       y = rows[i + 1].getElementsByTagName("TD")[1];
       //check if the two rows should switch place:
@@ -67,5 +111,8 @@ function sortTable() {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
       switching = true;
     }
+  }
+  for (i = 0; i < rows.length; i++) {
+    rows[i].children[0].innerText = i + 1;
   }
 }

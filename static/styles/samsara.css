@@ -135,6 +135,9 @@ nav a {
 .table table tbody tr.darker {
   background-color: rgb(227, 227, 227);
 }
+.table table tbody tr.light-yellow {
+  background-color: rgb(255, 245, 230);
+}
 .table table tbody tr:hover {
   background-color: rgb(116, 131, 155);
   color: white;
@@ -177,6 +180,18 @@ nav a {
 }
 .table table tbody .highLited i.fa-recycle {
   color: rgb(116, 125, 252);
+}
+.table table tbody .highLited i.fa-bell {
+  color: rgb(255, 234, 98);
+}
+.table table tbody .highLited i.fa-bell-slash {
+  color: rgb(204, 204, 204);
+}
+.table table tbody .highLited i.fa-lock {
+  color: rgb(255, 91, 91);
+}
+.table table tbody .highLited i.fa-lock-open {
+  color: rgb(126, 250, 78);
 }
 .table table tbody .highLited i:active {
   background-color: rgb(168, 168, 168);

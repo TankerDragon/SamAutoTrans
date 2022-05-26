@@ -13,9 +13,21 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-    <title>Samsara</title>
+    <title>Units</title>
   </head>
   <body>
+    <nav>
+      <img src="{% static 'images/logo2.png' %}" alt="logo" width="130" />
+      <div class="categories">
+        <a href="{% url 'samsara' %}">Units</a>
+        <a href="{% url 'trailers' %}">Trailers</a>
+      </div>
+      <strong>Logged in by: {{ user }}</strong>
+      <div>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'logout' %}">Log out</a>
+      </div>
+    </nav>
     <div id="main">{% block content %} {% endblock %}</div>
   </body>
 </html>
