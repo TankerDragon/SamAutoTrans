@@ -138,6 +138,9 @@ nav a {
 .table table tbody tr.light-yellow {
   background-color: rgb(255, 245, 230);
 }
+.table table tbody tr.danger {
+  background-color: rgb(255, 73, 64);
+}
 .table table tbody tr:hover {
   background-color: rgb(116, 131, 155);
   color: white;

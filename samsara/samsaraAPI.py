@@ -63,6 +63,24 @@ def alarm(req_data):
             print(d['alarm'])
             break
 
+def trailer_alarm(req_data):
+    for d in trailers_data:
+        if d['id'] == req_data['id']:
+            if req_data['alarm']:
+                d['alarm'] = True
+                if d['speedMilesPerHour'] == 0:
+                    d['alarm_mode'] = 1
+                else:
+                    d['alarm_mode'] = 0
+            else:
+                d['alarm_signal'] = False
+                d['alarm'] = False
+            ##
+            
+
+            print('*')
+            break
+
 loopControl = Control()
 
 def update_units():
@@ -94,7 +112,8 @@ def update_units():
                 'speed': r['gps'][0]['speedMilesPerHour'], 
                 'location': r['gps'][0]['reverseGeo']['formattedLocation'],
                 'alarm': False,
-                'alarm_mode': 'move'
+                'alarm_mode': 0,
+                'alarm_signal': False
                 })
 
 
@@ -105,6 +124,16 @@ def update_trailers():
         for d in trailers_data:
             if d['id'] == r['id']:
                 is_present = True
+                if d['alarm']:
+                    if d['alarm_mode'] == 0:
+                        if r['location'][0]['speedMilesPerHour'] == 0:
+                            d['alarm_signal'] = True
+                            print('*********************', d['name'])
+                    else:
+                        if r['location'][0]['speedMilesPerHour'] != 0:
+                            d['alarm_signal'] = True
+                            print('*********************', d['name'])
+
                 d['name'] = r['name']
                 d['assetSerialNumber'] = r['assetSerialNumber']
                 d['engineHours'] = r['engineHours']
@@ -126,7 +155,8 @@ def update_trailers():
                 'speedMilesPerHour': r['location'][0]['speedMilesPerHour'],
                 'timeMs': r['location'][0]['timeMs'],
                 'alarm': False,
-                'alarm_mode': 'move'
+                'alarm_mode': 0,
+                'alarm_signal': False
                 })
     # print(trailers_data)
 

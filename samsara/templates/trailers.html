@@ -3,24 +3,28 @@
 <div class="container">
   <div class="table">
     <div class="row">
-      <h1>Information</h1>
+      <h1>Trailer Information</h1>
     </div>
     <table>
       <thead>
         <td>№</td>
-        <td>Unit number</td>
-        <td>Odometer</td>
+        <td>Trailer number</td>
         <td>Latitude</td>
         <td>Longitude</td>
         <td>Speed</td>
         <td>Location</td>
+        <td>Time (hours)</td>
         <td>Alarm</td>
       </thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
 </div>
+<audio id="signalAudio">
+  <source src="{% static 'audio/fart.mp3' %}" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
 
-<script src="{% static 'js/samsara.js' %}"></script>
+<script src="{% static 'js/samsara-trailers.js' %}"></script>
 
 {% endblock %}
