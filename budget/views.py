@@ -1,6 +1,3 @@
-from calendar import week
-from re import L
-from turtle import update
 from django.shortcuts import render, redirect
 from requests import request
 from rest_framework.decorators import api_view
