@@ -47,6 +47,8 @@ function get() {
     .then((data) => {
       // console.log("json data: ", data);
       update(data.data);
+      document.getElementById("num-trucks").innerText = data.num.trucks;
+      document.getElementById("num-trailers").innerText = data.num.trailers;
     });
 }
 get();

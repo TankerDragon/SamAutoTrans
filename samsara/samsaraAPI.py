@@ -1,3 +1,4 @@
+import numbers
 import requests
 import threading
 import time 
@@ -17,6 +18,14 @@ params = {
 
 data = []
 trailers_data = []
+num = {
+    'trucks': 0,
+    'trailers': 0
+}
+temp_num = {
+    'trucks': 0,
+    'trailers': 0
+}
 
 ###################
 
@@ -24,7 +33,7 @@ trailers_data = []
 
 class Control:
     started = False
-    UPS = 5   # update in soconds
+    UPS = 4   # update in soconds
 
     def get_status(self):
         if self.started:
@@ -100,6 +109,8 @@ def update_units():
                 d['longitude'] = r['gps'][0]['longitude']
                 # d['headingDegrees'] = r['gps'][0]['headingDegrees']
                 d['speed'] = r['gps'][0]['speedMilesPerHour']
+                if d['speed'] != 0:
+                    temp_num['trucks'] += 1
                 d['location'] = r['gps'][0]['reverseGeo']['formattedLocation']
                 break
         if not is_present:
@@ -141,6 +152,8 @@ def update_trailers():
                 d['latitude'] = r['location'][0]['latitude']
                 d['longitude'] = r['location'][0]['longitude']
                 d['speedMilesPerHour'] = r['location'][0]['speedMilesPerHour']
+                if d['speedMilesPerHour'] != 0:
+                    temp_num['trailers'] += 1
                 d['timeMs'] = r['location'][0]['timeMs']
                 break
         if not is_present:
@@ -162,8 +175,14 @@ def update_trailers():
 
 
 def loop():
+    temp_num['trucks'] = 0
     update_units()
+    temp_num['trailers'] = 0
     update_trailers()
+    ##### applying into real num list
+    num['trucks'] = temp_num['trucks']
+    num['trailers'] = temp_num['trailers']
+
     
         
     # print(data)

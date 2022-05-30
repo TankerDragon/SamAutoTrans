@@ -19,8 +19,14 @@
     <nav>
       <img src="{% static 'images/logo2.png' %}" alt="logo" width="130" />
       <div class="categories">
-        <a href="{% url 'samsara' %}">Trucks</a>
-        <a href="{% url 'trailers' %}">Trailers</a>
+        <a href="{% url 'samsara' %}" class="notification">
+          <span>Trucks</span>
+          <span class="badge" id="num-trucks">00</span>
+        </a>
+        <a href="{% url 'trailers' %}" class="notification">
+          <span>Trailers</span>
+          <span class="badge" id="num-trailers">00</span>
+        </a>
       </div>
       <strong>Logged in by: {{ user }}</strong>
       <div>

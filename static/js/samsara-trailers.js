@@ -51,10 +51,12 @@ function get() {
     .then((data) => {
       //   console.log("json data: ", data);
       update(data.trailers);
+      document.getElementById("num-trucks").innerText = data.num.trucks;
+      document.getElementById("num-trailers").innerText = data.num.trailers;
     });
 }
 get();
-setInterval(get, 5000);
+setInterval(get, 4000);
 
 function post(id, alarm) {
   fetch("/samsara/get-trailers/", {
@@ -118,5 +120,27 @@ function sortTable() {
   }
   for (i = 0; i < rows.length; i++) {
     rows[i].children[0].innerText = i + 1;
+  }
+  search();
+}
+function search() {
+  // Declare variables
+  var input, filter, table, tr, td1, td2, i, txtValue;
+  input = document.getElementById("search-input");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("tbody");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td1 = tr[i].getElementsByTagName("td")[5];
+    if (td1) {
+      txtValue = td1.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
   }
 }
