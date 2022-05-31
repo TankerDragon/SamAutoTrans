@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'budget',
     'eld',
+    'telesam',
     'samsara',
     'main'
 ]

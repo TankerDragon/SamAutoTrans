@@ -10,7 +10,7 @@ client = TelegramClient('anon', api_id, api_hash)
 
 
 async def main():
-    me = await client.get_me()
+    # me = await client.get_me()
 
     # print(me.first_name)
 
@@ -69,7 +69,7 @@ async def main():
 
     # # You can print the message history of any chat:
     async for message in client.iter_messages(-1001279009032):
-        print(message.message)
+        print(message)
         print('************************')
 
         # You can download media from messages, too!
