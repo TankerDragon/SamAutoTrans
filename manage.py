@@ -3,6 +3,8 @@
 import os
 import sys
 
+def duck():
+    print('not f, duck function')
 
 def main():
     """Run administrative tasks."""

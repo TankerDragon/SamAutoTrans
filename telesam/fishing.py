@@ -1,82 +1,95 @@
-from telethon import TelegramClient
+from telethon import TelegramClient, events
+
+import requests
+import threading
 
 # Use your own values from my.telegram.org
-api_id = 15193518
-api_hash = '504ab7ab95614155f137244e819b5e91'
-
-# 5314855946:AAEuyH09krJPgoAxjNeqvV68nCVNQtZ3pNE
-client = TelegramClient('anon', api_id, api_hash)
+api_id = 19317786
+api_hash = 'e2d1af44a00ed24df364699452b2134f'
+client = TelegramClient('session', api_id, api_hash)
 
 
 
-async def main():
-    # me = await client.get_me()
+# client = TelegramClient('anon', api_id, api_hash)
 
-    # print(me.first_name)
 
-    # username = me.username
+# api_id = 19217253
+# api_hash = 'a54f03b2dbe152fd65e26e4549ec8fe9'
+
+
+
+# async def main():
+#     async for message in client.iter_messages(-1001279009032):
+#         print(message)
+#         print('************************')
+
+# with client:
+#     client.loop.run_until_complete(main())
+
+
+
+
+# class Control:
+#     started = False
+#     UPS = 4   # update in soconds
+
+#     def get_status(self):
+#         if self.started:
+#             return "started"
+#         else:
+#             return "stopped"
+#     # functions to control main loop <<<<<<
+
+#     def start_looping(self):
+#         if not self.started:
+#             self.started = True
+#             set_interval(loop, self.UPS)
+
+#     def stop_looping(self):
+#         self.started = False
+
+#     # >>>>>>>>>>>>>>>>>>>
+
+
+# def set_interval(func, sec):
+
+#     def func_wrapper():
+#         set_interval(func, sec)
+#         func()
+
+#     if loopControl.started:
+#         t = threading.Timer(sec, func_wrapper)
+#         t.start()
+#         return t
+
+
+
+
+# loopControl = Control()
+
+
+# def loop():
+#     ##### applying into real num list
+#     num['trucks'] = temp_num['trucks']
+#     num['trailers'] = temp_num['trailers']
+
     
-    # print(username)
-    # print(me.phone)
-
-    # print(await client.get_peer_id('me'))
+# loopControl.start_looping()
 
 
 
+# Use your own values from my.telegram.org
 
+myChannelIDs = [-1001279009032, -1001170427503, -1001200307642, -1001588755123, -1001260797603]
 
+words = ['']
 
-    # You can print all the dialogs/conversations that you are part of:
-    # async for dialog in client.iter_dialogs():
-    #     # with open('data.csv', 'w') as csvfile:
-    #     print('*/*/*/*/*/*/*/*')
-    #     print(dialog)
-            # writer.writerow(dialog)
-            # writer.writerow([dialog.name, dialog.id, dialog.username, dialog.phone, dialog.status])
-                
-        # print(dialog.name, 'has ID', dialog.id)
+@client.on(events.NewMessage(chats=myChannelIDs))
+async def my_event_handler(event):
+    for w in words:
+        if w in event.text:
+            print(event.text)
+            print('*********************')
 
-    # # You can send messages to yourself...
-    # await client.send_message('me', 'Assalomu alaykum!')
-    # # ...to some chat ID
-    # await client.send_message(-330604, 'Hello, group!')
-    # # ...to your contacts
-    # await client.send_message('+998977340770', 'Hello, Saidbek!')
-    # # ...or even to any username
-    # await client.send_message('@Alex_Dsp', 'Testing Telegrammmmmm!')
-
-    # for a in range(100):  #998200
-    #      await client.send_message('@Alex_Dsp', 'Assalomu alaykum, hojiaka! Man Azizbekning robotiman - ' + str(a))
-    
-    # ELD Team has ID -678356502
-    
-    # You can, of course, use markdown in your messages:
-    # message = await client.send_message(
-    #     'me',
-    #     'This message has bold, code, italics and '
-    #     'a [nice website](https://example.com)!',
-    #     link_preview=False
-    # )
-
-    # Sending a message returns the sent message object, which you can use
-    # print(message.raw_text)
-
-    # You can reply to messages directly if you have a message object
-    # await message.reply('Cool!')
-
-    # Or send files, songs, documents, albums...
-  #  await client.send_file('me', '/home/me/Pictures/holidays.jpg')
-
-    # # You can print the message history of any chat:
-    async for message in client.iter_messages(-1001279009032):
-        print(message)
-        print('************************')
-
-        # You can download media from messages, too!
-        # The method will return the path where the file was saved.
-        # if message.photo:
-        #     path = await message.download_media()
-        #     print('File saved to', path)  # printed after download is done
-
-with client:
-    client.loop.run_until_complete(main())
+client.start()
+client.run_until_disconnected()
