@@ -11,7 +11,12 @@ client = TelegramClient('anon', api_id, api_hash)
 
 async def main():
     me = await client.get_me()
-
+    entity = await client.get_entity(-678356502)
+    print(entity)
+    await client.send_message(-678356502, 'CHECKED ELD ERRORS #AB #AN')
+    
+    # print(await client.get_entity(678356502))
+    # await client(SendMessageRequest(-678356502, 'Hello there!'))
     # print(me.first_name)
 
     # username = me.username
@@ -19,7 +24,7 @@ async def main():
     # print(username)
     # print(me.phone)
 
-    # print(await client.get_peer_id('me'))
+    # print(await client.get_peer_id(-678356502))
 
 
 
@@ -29,7 +34,7 @@ async def main():
     # You can print all the dialogs/conversations that you are part of:
     # async for dialog in client.iter_dialogs():
     #     # with open('data.csv', 'w') as csvfile:
-    #     print('*/*/*/*/*/*/*/*')
+    #     print('*****************************************')
     #     print(dialog)
             # writer.writerow(dialog)
             # writer.writerow([dialog.name, dialog.id, dialog.username, dialog.phone, dialog.status])
@@ -68,9 +73,9 @@ async def main():
   #  await client.send_file('me', '/home/me/Pictures/holidays.jpg')
 
     # # You can print the message history of any chat:
-    async for message in client.iter_messages(-1001279009032):
-        print(message.message)
-        print('************************')
+    # async for message in client.iter_messages(-1001279009032):
+    #     print(message.message)
+    #     print('************************')
 
         # You can download media from messages, too!
         # The method will return the path where the file was saved.
@@ -78,5 +83,6 @@ async def main():
         #     path = await message.download_media()
         #     print('File saved to', path)  # printed after download is done
 
-with client:
-    client.loop.run_until_complete(main())
+# with client:
+#     client.loop.run_until_complete(main())
+
