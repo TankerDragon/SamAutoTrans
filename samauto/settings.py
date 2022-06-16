@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'eld',
     'telesam',
     'samsara',
-    'main'
+    'tthack',
+    'main',
 ]
 
 MIDDLEWARE = [
