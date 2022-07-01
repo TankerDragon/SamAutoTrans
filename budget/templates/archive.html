@@ -18,8 +18,8 @@
         <td>Changed by</td>
         <td>BOL number</td>
         <td>PCS number</td>
-
         <td>Notes</td>
+        <td>Actions</td>
       </thead>
       <tbody id="tbody">
         {% for log in logs %}
@@ -34,11 +34,15 @@
           <td>{{log.bol_number}}</td>
           <td>{{log.pcs_number}}</td>
           <td>{{log.note}}</td>
+          <td class="highLited">
+            <i onclick="edit_log({{log.id}})" class="fa-solid fa-pen"></i>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+<script src="{% static 'js/budget.js' %}"></script>
 
 {% endblock %}

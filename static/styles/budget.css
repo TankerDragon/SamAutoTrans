@@ -178,8 +178,11 @@ nav a {
 .table table tbody .highLited i.fa-recycle {
   color: rgb(116, 125, 252);
 }
+.table table tbody .highLited i.fa-pen {
+  color: rgb(247, 177, 64);
+}
 .table table tbody .highLited i:active {
-  background-color: rgb(168, 168, 168);
+  background-color: rgba(168, 168, 168, 0.805);
 }
 #form {
   width: 40%;
@@ -187,7 +190,7 @@ nav a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 5px 5px 10px 5px rgb(108, 108, 108);
+  box-shadow: 1px 1px 5px 2px rgb(143, 143, 143);
   border-radius: 5px;
   position: fixed;
   background-color: #f0f3f8;

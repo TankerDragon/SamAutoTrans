@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from budget.models import Driver, Log, Group
-from .forms import UserForm, DriverForm
+from .forms import UserForm, DriverForm, LogForm
 from django.contrib.auth.models import User
 from .serializers import DriverSerializer
 from decimal import Decimal
@@ -255,6 +255,12 @@ def driver_archive(request, id):
 
     context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver.first_name + " " + driver.last_name}
     return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
+def edit_log(request, id):
+    query = Log.objects.get(pk = id)
+    form = LogForm(instance=query)
+    return render(request, 'edit-log.html', {'form': form})
 
 @login_required(login_url='login')
 def deactivate_driver(request, id):

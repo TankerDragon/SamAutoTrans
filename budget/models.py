@@ -24,7 +24,7 @@ class Driver(models.Model):
     is_active = models.BooleanField(default=1)
 
     def __str__(self):
-        return self.first_name
+        return self.first_name + ' ' + self.last_name
 
 class Group(models.Model):
     staff = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -40,3 +40,8 @@ class Log(models.Model):
     date = models.DateTimeField(auto_now=True)
     note = models.CharField(max_length=100, blank=True)
     is_edited = models.BooleanField(default=False)
+
+class LogEdit(models.Model):
+    original_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='original')
+    edited_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='edited')
+    date = models.DateTimeField(auto_now=True)
