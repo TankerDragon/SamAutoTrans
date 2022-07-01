@@ -21,11 +21,13 @@ def main(request):
         l_total = 0
         d_total = 0
         r_total = 0
+        s_total = 0
         for query in queryset:
-            query.total_budget = query.d_budget + query.l_budget + query.r_budget
+            query.total_budget = query.d_budget + query.l_budget + query.r_budget + query.s_budget
             l_total += query.l_budget
             d_total += query.d_budget
             r_total += query.r_budget
+            s_total += query.s_budget
 
         ##################
         data = {
@@ -33,18 +35,21 @@ def main(request):
                 "D" : 0,
                 "L" : 0,
                 "R" : 0,
+                "S" : 0,
                 "T" : 0
             },
             "month": {
                 "D" : 0,
                 "L" : 0,
                 "R" : 0,
+                "S" : 0,
                 "T" : 0
             },
             "year": {
                 "D" : 0,
                 "L" : 0,
                 "R" : 0,
+                "S" : 0,
                 "T" : 0
             }
         }
@@ -78,7 +83,8 @@ def main(request):
             'l_total': l_total,
             'd_total': d_total,
             'r_total': r_total,
-            'total':l_total + d_total + r_total, 
+            's_total': s_total,
+            'total':l_total + d_total + r_total + s_total, 
             'is_superuser': user.is_superuser, 
             'user': request.user,
             'data': data
@@ -291,19 +297,20 @@ def budget(request, id):
         try:
             driver = Driver.objects.get(pk=id)
             if user.is_superuser or driver.dispatcher_id == user.id or driver.updater_id == user.id:
-                if request.data['bol_number'] != '' and request.data['pcs_number'] != '':
-                    amount = Decimal(request.data['amount'])
-                    b_type = request.data['budget_type']
-                    if b_type == 'D':
-                        driver.d_budget += amount
-                    elif b_type == 'L':
-                        driver.l_budget += amount
-                    elif b_type == 'R':
-                        driver.r_budget += amount
-                    driver.save()
-                    log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
-                    log.save()
-                    return Response(status=status.HTTP_200_OK)
+                amount = Decimal(request.data['amount'])
+                b_type = request.data['budget_type']
+                if b_type == 'D':
+                    driver.d_budget += amount
+                elif b_type == 'L':
+                    driver.l_budget += amount
+                elif b_type == 'R':
+                    driver.r_budget += amount
+                elif b_type == 'S':
+                    driver.s_budget += amount
+                driver.save()
+                log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
+                log.save()
+                return Response(status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
         except Driver.DoesNotExist:

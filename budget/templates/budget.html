@@ -39,6 +39,13 @@
               <td>{{data.year.R}}</td>
             </tr>
             <tr>
+              <td>Dirilis Budget</td>
+              <td>{{s_total}}</td>
+              <td>{{data.week.S}}</td>
+              <td>{{data.month.S}}</td>
+              <td>{{data.year.S}}</td>
+            </tr>
+            <tr>
               <td>Total</td>
               <td>{{total}}</td>
               <td>{{data.week.T}}</td>
@@ -64,6 +71,7 @@
         <td>Driver's Budget</td>
         <td>Lane Budget</td>
         <td>Recovery Budget</td>
+        <td>Dirilis Budget</td>
         <td>Total Budget</td>
         <td>Actions</td>
       </thead>
@@ -76,6 +84,7 @@
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
+          <td>{{driver.s_budget}}</td>
           <td>{{driver.total_budget}}</td>
           <td class="highLited">
             <i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i>
@@ -139,6 +148,7 @@
       <option value="D">Driver's Budget</option>
       <option value="L">Lane Budget</option>
       <option value="R">Recovery Budget</option>
+      <option value="S">Dirilis Budget</option>
     </select>
     <label for="amount">BOL number:</label>
     <input id="bol-number" type="text" />
@@ -156,7 +166,7 @@
 <script src="{% static 'js/lib/canvasjs.min.js' %}"></script>
 
 <script>
-  let l_total = {{l_total}}, d_total = {{d_total}}, r_total = {{r_total}}, total = {{total}};
+  let l_total = {{l_total}}, d_total = {{d_total}}, r_total = {{r_total}}, s_total = {{s_total}}, total = {{total}};
   window.onload = function () {
     var chart = new CanvasJS.Chart("chartContainer", {
       animationEnabled: true,
@@ -174,9 +184,10 @@
           indexLabel: "{label} - #percent%",
           toolTipContent: "<b>{label}:</b> {y} (#percent%)",
           dataPoints: [
-            { y: total/l_total, label: "Lane Budget" },
-            { y: total/d_total, label: "Driver Budget" },
-            { y: total/r_total, label: "Recovery Budget" },
+            { y: l_total === 0 ? 0 : total/l_total, label: "Lane Budget" },
+            { y: d_total === 0 ? 0 : total/d_total, label: "Driver Budget" },
+            { y: r_total === 0 ? 0 : total/r_total, label: "Recovery Budget" },
+            { y: s_total === 0 ? 0 : total/s_total, label: "Dirilis Budget" },
           ],
         },
       ],
