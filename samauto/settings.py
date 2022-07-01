@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'eld',
     'telesam',
     'samsara',
-    'tthack',
     'main',
 ]
 
@@ -93,7 +92,7 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'root',
         'NAME': 'samauto',
-        'PASSWORD': 'dragondD8090'
+        'PASSWORD': '@akb21s4m$'
         # 'PASSWORD': 'dragondD8090'
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),

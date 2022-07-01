@@ -27,6 +27,5 @@ urlpatterns = [
     path('eld/', include('eld.urls')),
     path('samsara/', include('samsara.urls')),
     path('telesam/', include('telesam.urls')),
-    path('ttdata/', include('tthack.urls')),
     path('no-access/', views.noAccess, name='no-access')
 ]

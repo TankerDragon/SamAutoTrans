@@ -258,9 +258,11 @@ def driver_archive(request, id):
 
 @login_required(login_url='login')
 def edit_log(request, id):
+    user = User.objects.get(username = request.user)
     query = Log.objects.get(pk = id)
-    form = LogForm(instance=query)
-    return render(request, 'edit-log.html', {'form': form})
+    log_form = LogForm(instance=query)
+    context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user}
+    return render(request, 'edit-log.html', context)
 
 @login_required(login_url='login')
 def deactivate_driver(request, id):
