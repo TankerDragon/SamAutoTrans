@@ -1,8 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from budget.models import Driver, Log, Group
+from budget.models import Driver, Log, LogEdit, Group
 from .forms import UserForm, DriverForm, LogForm
 from django.contrib.auth.models import User
 from .serializers import DriverSerializer
@@ -229,9 +230,9 @@ def archive(request):
     user = User.objects.get(username = request.user)
     drivers = Driver.objects.all()
     if user.is_superuser:
-        queryset = Log.objects.all().order_by('-date')
+        queryset = Log.objects.all().filter(is_edited = False).order_by('-date')
     else:
-        queryset = Log.objects.filter(user = user)
+        queryset = Log.objects.filter(user = user, is_edited = False).order_by('-date')
 
     for query in queryset:
         driver = drivers.get(id = query.driver_id)
@@ -246,9 +247,9 @@ def driver_archive(request, id):
     driver = Driver.objects.get(pk = id)
 
     if user.is_superuser:
-        queryset = Log.objects.all().filter(driver_id = id).order_by('-date')
+        queryset = Log.objects.all().filter(driver_id = id, is_edited = False).order_by('-date')
     else:
-        queryset = Log.objects.filter(driver_id = id).filter(user = user).order_by('-date')
+        queryset = Log.objects.filter(driver_id = id, is_edited = False).filter(user = user).order_by('-date')
 
     for query in queryset:
         query.name = driver.first_name + ' ' + driver.last_name
@@ -259,10 +260,34 @@ def driver_archive(request, id):
 @login_required(login_url='login')
 def edit_log(request, id):
     user = User.objects.get(username = request.user)
-    query = Log.objects.get(pk = id)
-    log_form = LogForm(instance=query)
+    log = Log.objects.get(pk = id)
+    log_form = LogForm(instance=log)
+    if request.method == 'POST':
+        data = request.POST
+        new_log = Log()
+        log.is_edited = True
+        log.save()
+        #updating log
+        new_log.user = request.user
+        new_log.driver_id = data['driver']
+        new_log.change = data['change']
+        new_log.budget_type = data['budget_type']
+        new_log.bol_number = data['bol_number']
+        new_log.pcs_number = data['pcs_number']
+        new_log.note = data['note']
+        new_log.save()
+
+        print(new_log.id)
+        #saving log edition
+        log_edit = LogEdit.objects.create(original_log = log, edited_log = new_log)
+        log_edit.save()
+
+        # print(request.POST)
+        return redirect('archive')
+
     context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user}
     return render(request, 'edit-log.html', context)
+
 
 @login_required(login_url='login')
 def deactivate_driver(request, id):
