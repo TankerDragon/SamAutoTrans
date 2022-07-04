@@ -10,7 +10,7 @@ from .serializers import DriverSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 import datetime
-
+from django.db.models import Q
 #funtions 
 
 # Create your views here.
@@ -54,7 +54,7 @@ def main(request):
                 "T" : 0
             }
         }
-        archives = Log.objects.all().order_by('date')
+        archives = Log.objects.filter(is_edited = False).order_by('date')
         today = datetime.datetime.today()
         week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
         month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
@@ -227,6 +227,10 @@ def driver_detail(request, id):
 
 @login_required(login_url='login')
 def archive(request):
+    log_edits = LogEdit.objects.all().values('edited_log')
+    logEdits_list = list(map(lambda l: l['edited_log'], log_edits))
+    print(logEdits_list)
+    #
     user = User.objects.get(username = request.user)
     drivers = Driver.objects.all()
     if user.is_superuser:
@@ -235,27 +239,37 @@ def archive(request):
         queryset = Log.objects.filter(user = user, is_edited = False).order_by('-date')
 
     for query in queryset:
-        driver = drivers.get(id = query.driver_id)
-        query.name = driver.first_name + ' ' + driver.last_name
+        # driver = drivers.get(id = query.driver_id)
+        # query.name = driver.first_name + ' ' + driver.last_name
+        query.edited_link = False
+        print(query.id)
+        if query.id in logEdits_list:
+            query.edited_link = True
 
     context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': True}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
 def driver_archive(request, id):
-    user = User.objects.get(username = request.user)
     driver = Driver.objects.get(pk = id)
 
-    if user.is_superuser:
+    if request.user.is_superuser:
         queryset = Log.objects.all().filter(driver_id = id, is_edited = False).order_by('-date')
     else:
-        queryset = Log.objects.filter(driver_id = id, is_edited = False).filter(user = user).order_by('-date')
+        queryset = Log.objects.filter(driver_id = id, is_edited = False).filter(user = request.user).order_by('-date')
 
-    for query in queryset:
-        query.name = driver.first_name + ' ' + driver.last_name
+    # for query in queryset:
+    #     query.name = driver.first_name + ' ' + driver.last_name
 
-    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver.first_name + " " + driver.last_name}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver}
     return render(request, 'archive.html', context)
+
+
+@login_required(login_url='login')
+def archive_edits(request, id):
+    pass
+
+
 
 @login_required(login_url='login')
 def edit_log(request, id):
@@ -264,20 +278,42 @@ def edit_log(request, id):
     log_form = LogForm(instance=log)
     if request.method == 'POST':
         data = request.POST
-        new_log = Log()
         log.is_edited = True
         log.save()
+        #getting back changed budget from driver
+        driver = Driver.objects.get(id = log.driver_id)
+        if log.budget_type == 'D':
+            driver.d_budget -= log.change
+        elif log.budget_type == 'L':
+            driver.l_budget -= log.change
+        elif log.budget_type == 'R':
+            driver.r_budget -= log.change
+        elif log.budget_type == 'S':
+            driver.s_budget -= log.change
+        driver.save()
         #updating log
+        new_log = Log()
         new_log.user = request.user
         new_log.driver_id = data['driver']
-        new_log.change = data['change']
+        new_log.change = Decimal(data['change'])
         new_log.budget_type = data['budget_type']
         new_log.bol_number = data['bol_number']
         new_log.pcs_number = data['pcs_number']
         new_log.note = data['note']
         new_log.save()
 
-        print(new_log.id)
+        #saving new changed budget to driver
+        driver = Driver.objects.get(id = new_log.driver_id)
+        if new_log.budget_type == 'D':
+            driver.d_budget += new_log.change
+        elif new_log.budget_type == 'L':
+            driver.l_budget += new_log.change
+        elif new_log.budget_type == 'R':
+            driver.r_budget += new_log.change
+        elif new_log.budget_type == 'S':
+            driver.s_budget += new_log.change
+        driver.save()
+        # print(new_log.id)
         #saving log edition
         log_edit = LogEdit.objects.create(original_log = log, edited_log = new_log)
         log_edit.save()
@@ -312,7 +348,41 @@ def activate_driver(request, id):
     return redirect('budget')
 
 
+@login_required(login_url='login')
+@api_view(['GET', 'POST'])
+def reset(request, type):
+    if request.user.is_superuser:
+        #
+        if type == 'D':
+            query = Driver.objects.filter(~Q(d_budget = 0))
+            for q in query:
+                q.d_budget = 0
+                q.save()
+        elif type == 'L':
+            query = Driver.objects.filter(~Q(l_budget = 0))
+            for q in query:
+                q.l_budget = 0
+                q.save()
+        elif type == 'R':
+            query = Driver.objects.filter(~Q(r_budget = 0))
+            for q in query:
+                q.r_budget = 0
+                q.save()
+        elif type == 'S':
+            query = Driver.objects.filter(~Q(s_budget = 0))
+            for q in query:
+                q.s_budget = 0
+                q.save()
+        else:
+            return HttpResponse('there is no that type of budget')
 
+        #
+        logs = Log.objects.filter(budget_type = type)
+        for log in logs:
+            log.delete()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return redirect('no-access')
 
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])

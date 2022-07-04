@@ -13,6 +13,27 @@ function modify(e, id) {
   form.style.display = "block";
   form.classList.toggle("active");
 }
+function reset(type) {
+  message = "Are you sure to reset this budget? All budget of this type will be Zero";
+  if (confirm(message) == true) {
+    userPreference = "Data saved successfully!";
+    fetch("reset/" + type, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCSRF(),
+      },
+      body: JSON.stringify({}),
+    })
+      .catch((error) => {
+        console.log("ERROR", error);
+        window.alert(error);
+      })
+      .then(() => {
+        location.href = "/budget";
+      });
+  }
+}
 function archive(id) {
   location.href = "/budget/archive/" + id;
 }

@@ -181,8 +181,17 @@ nav a {
 .table table tbody .highLited i.fa-pen {
   color: rgb(247, 177, 64);
 }
+.table table tbody .highLited i.fa-trash-can {
+  color: rgb(255, 81, 81);
+}
 .table table tbody .highLited i:active {
   background-color: rgba(168, 168, 168, 0.805);
+}
+.table table tbody .highLited a {
+  text-decoration: none;
+  margin-left: 10px;
+  color: rgb(26, 171, 1);
+  text-shadow: 0px 0px 1px rgb(143, 143, 143);
 }
 #form {
   width: 40%;

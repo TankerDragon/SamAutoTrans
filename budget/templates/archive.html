@@ -26,7 +26,7 @@
         <tr>
           <td>{{log.change}}</td>
           {% if many_drivers == True %}
-          <td>{{log.name}}</td>
+          <td>{{log.driver}}</td>
           {% endif %}
           <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% endif %} Budget</td>
           <td>{{log.date}}</td>
@@ -36,6 +36,9 @@
           <td>{{log.note}}</td>
           <td class="highLited">
             <i onclick="edit_log({{log.id}})" class="fa-solid fa-pen"></i>
+            {%if log.edited_link %}
+            <a href="{% url 'archive-edits' log.id %}">edited</a>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}

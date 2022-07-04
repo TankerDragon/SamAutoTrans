@@ -14,36 +14,41 @@
               <td>Weekly change</td>
               <td>Monthly change</td>
               <td>Yearly change</td>
+              <td></td>
             </tr>
           </thead>
           <tbody class="first-bold">
             <tr>
-              <td>Lane Budget</td>
-              <td>{{l_total}}<d_total + r_total/td></td>
-              <td>{{data.week.L}}</td>
-              <td>{{data.month.L}}</td>
-              <td>{{data.year.L}}</td>
-            </tr>
-            <tr>
-              <td>Driver Budget</td>
+              <td>Driver</td>
               <td>{{d_total}}</td>
               <td>{{data.week.D}}</td>
               <td>{{data.month.D}}</td>
               <td>{{data.year.D}}</td>
+              <td class="highLited" onclick="reset('D')"><i class="fa-solid fa-trash-can"></i></td>
             </tr>
             <tr>
-              <td>Recovery Budget</td>
+              <td>Lane</td>
+              <td>{{l_total}}</td>
+              <td>{{data.week.L}}</td>
+              <td>{{data.month.L}}</td>
+              <td>{{data.year.L}}</td>
+              <td class="highLited" onclick="reset('L')"><i class="fa-solid fa-trash-can"></i></td>
+            </tr>
+            <tr>
+              <td>Recovery</td>
               <td>{{r_total}}</td>
               <td>{{data.week.R}}</td>
               <td>{{data.month.R}}</td>
               <td>{{data.year.R}}</td>
+              <td class="highLited" onclick="reset('R')"><i class="fa-solid fa-trash-can"></i></td>
             </tr>
             <tr>
-              <td>Dirilis Budget</td>
+              <td>Dirilis</td>
               <td>{{s_total}}</td>
               <td>{{data.week.S}}</td>
               <td>{{data.month.S}}</td>
               <td>{{data.year.S}}</td>
+              <td class="highLited" onclick="reset('S')"><i class="fa-solid fa-trash-can"></i></td>
             </tr>
             <tr>
               <td>Total</td>
@@ -51,6 +56,7 @@
               <td>{{data.week.T}}</td>
               <td>{{data.month.T}}</td>
               <td>{{data.year.T}}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -181,7 +187,7 @@
           startAngle: 60,
           innerRadius: 60,
           indexLabelFontSize: 17,
-          indexLabel: "{label} - #percent%",
+          indexLabel: "{label} (#percent%)",
           toolTipContent: "<b>{label}:</b> {y} (#percent%)",
           dataPoints: [
             { y: l_total === 0 ? 0 : total/l_total, label: "Lane Budget" },
