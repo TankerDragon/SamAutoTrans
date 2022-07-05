@@ -35,7 +35,7 @@
           <td>{{log.pcs_number}}</td>
           <td>{{log.note}}</td>
           <td class="highLited">
-            <i onclick="edit_log({{log.id}})" class="fa-solid fa-pen"></i>
+            <abbr title="Edit"><i onclick="edit_log({{log.id}})" class="fa-solid fa-pen"></i></abbr>
             {%if log.edited_link %}
             <a href="{% url 'archive-edits' log.id %}">edited</a>
             {% endif %}

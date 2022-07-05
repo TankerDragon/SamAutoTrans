@@ -7,6 +7,9 @@ body {
   background-color: #f0f3f8;
   font-family: sans-serif;
 }
+abbr {
+  text-decoration: none;
+}
 .container {
   width: 75%;
   margin: auto;

@@ -24,7 +24,9 @@
               <td>{{data.week.D}}</td>
               <td>{{data.month.D}}</td>
               <td>{{data.year.D}}</td>
-              <td class="highLited" onclick="reset('D')"><i class="fa-solid fa-trash-can"></i></td>
+              <td class="highLited" onclick="reset('D')">
+                <abbr title="Reset Driver budget"><i class="fa-solid fa-trash-can"></i></abbr>
+              </td>
             </tr>
             <tr>
               <td>Lane</td>
@@ -32,7 +34,9 @@
               <td>{{data.week.L}}</td>
               <td>{{data.month.L}}</td>
               <td>{{data.year.L}}</td>
-              <td class="highLited" onclick="reset('L')"><i class="fa-solid fa-trash-can"></i></td>
+              <td class="highLited" onclick="reset('L')">
+                <abbr title="Reset Lane budget"><i class="fa-solid fa-trash-can"></i></abbr>
+              </td>
             </tr>
             <tr>
               <td>Recovery</td>
@@ -40,7 +44,9 @@
               <td>{{data.week.R}}</td>
               <td>{{data.month.R}}</td>
               <td>{{data.year.R}}</td>
-              <td class="highLited" onclick="reset('R')"><i class="fa-solid fa-trash-can"></i></td>
+              <td class="highLited" onclick="reset('R')">
+                <abbr title="Reset Recovery budget"><i class="fa-solid fa-trash-can"></i></abbr>
+              </td>
             </tr>
             <tr>
               <td>Dirilis</td>
@@ -48,7 +54,9 @@
               <td>{{data.week.S}}</td>
               <td>{{data.month.S}}</td>
               <td>{{data.year.S}}</td>
-              <td class="highLited" onclick="reset('S')"><i class="fa-solid fa-trash-can"></i></td>
+              <td class="highLited" onclick="reset('S')">
+                <abbr title="Reset Dirilis budget"><i class="fa-solid fa-trash-can"></i></abbr>
+              </td>
             </tr>
             <tr>
               <td>Total</td>
@@ -93,11 +101,11 @@
           <td>{{driver.s_budget}}</td>
           <td>{{driver.total_budget}}</td>
           <td class="highLited">
-            <i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i>
-            <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
+            <abbr title="Change budget"><i class="fa-solid fa-dollar-sign" onclick="modify(this, {{driver.id}})"></i></abbr>
+            <abbr title="Archive"><i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i></abbr>
             {% if is_superuser %}
-            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
-            <i onclick="deactivate_driver({{ driver.id }})" class="fa-solid fa-xmark"></i>
+            <abbr title="Personal information"><i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i></abbr>
+            <abbr title="Deactivate"><i onclick="deactivate_driver({{ driver.id }})" class="fa-solid fa-xmark"></i></abbr>
             {% endif %}
           </td>
         </tr>
@@ -130,9 +138,9 @@
           <td>{{driver.r_budget}}</td>
           <td>{{driver.total_budget}}</td>
           <td class="highLited">
-            <i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i>
-            <i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i>
-            <i onclick="activate_driver({{ driver.id }})" class="fa-solid fa-recycle"></i>
+            <abbr title="Archive"><i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i></abbr>
+            <abbr title="Personal information"><i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i></abbr>
+            <abbr title="Activate"><i onclick="activate_driver({{ driver.id }})" class="fa-solid fa-recycle"></i></abbr>
           </td>
         </tr>
         {%endif%} {% endfor %}
