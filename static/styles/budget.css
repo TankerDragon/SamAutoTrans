@@ -135,7 +135,11 @@ nav a {
 .table table tbody tr.darker {
   background-color: rgb(227, 227, 227);
 }
-.table table tbody tr:hover {
+.table table .zebra tr:nth-child(odd) {
+  background-color: rgb(227, 227, 227);
+}
+.table table tbody tr:hover,
+.table table .zebra tr:hover {
   background-color: rgb(116, 131, 155);
   color: white;
 }
@@ -284,6 +288,10 @@ nav a {
 }
 .table-container {
   width: 55%;
+}
+.error-message {
+  margin: 20px 0;
+  color: red;
 }
 tbody.first-bold tr td:first-child {
   font-weight: bold;

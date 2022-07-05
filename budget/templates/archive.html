@@ -21,14 +21,14 @@
         <td>Notes</td>
         <td>Actions</td>
       </thead>
-      <tbody id="tbody">
+      <tbody id="tbody" class="zebra">
         {% for log in logs %}
         <tr>
           <td>{{log.change}}</td>
           {% if many_drivers == True %}
-          <td>{{log.driver}}</td>
+          <td>{{log.name}}</td>
           {% endif %}
-          <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% endif %} Budget</td>
+          <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% elif log.budget_type == 'S' %}Dirilis{% endif %} Budget</td>
           <td>{{log.date}}</td>
           <td>{{log.user}}</td>
           <td>{{log.bol_number}}</td>

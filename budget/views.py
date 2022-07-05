@@ -1,3 +1,4 @@
+from email import message
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
@@ -12,12 +13,16 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.db.models import Q
 #funtions 
-
+def get_name(id, arr):
+    for a in arr:
+        if id == a['id']:
+            return a['first_name'] + ' ' + a['last_name']
+    return '*name not found'
 # Create your views here.
 @login_required(login_url='login')
 def main(request):
-    user = User.objects.get(username = request.user)
-    if user.is_superuser:
+    # user = User.objects.get(username = request.user)
+    if request.user.is_superuser:
         queryset = Driver.objects.all().order_by('first_name')
         l_total = 0
         d_total = 0
@@ -56,16 +61,29 @@ def main(request):
         }
         archives = Log.objects.filter(is_edited = False).order_by('date')
         today = datetime.datetime.today()
-        week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
-        month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
-        year_before = datetime.datetime.strftime(today - datetime.timedelta(days = 365) , '%Y-%m-%d')
+        week_before = today - datetime.timedelta(days = 7)
+        month_before = today - datetime.timedelta(days = 30)
+        year_before = today - datetime.timedelta(days = 365)
+        #
+        # week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
+        # month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
+        # year_before = datetime.datetime.strftime(today - datetime.timedelta(days = 365) , '%Y-%m-%d')
         # print(week_before)
         # print(month_before)
         # print(year_before)
-
-        week = archives.filter(date__gte = week_before)
-        month = archives.filter(date__gte = month_before)
-        year = archives.filter(date__gte = year_before)
+        # week_before2 = today - datetime.timedelta(days = 7)
+        # print(week_before2)
+        # w = filter(lambda a: a.date > week_before2, archives)
+        # print(archives)
+        # print(list(w))
+        # for a in archives:
+        #     print(a.date)
+        week = list(filter(lambda a: a.date > week_before, archives))
+        month = list(filter(lambda a: a.date > month_before, archives))
+        year = list(filter(lambda a: a.date > year_before, archives))
+        # week = archives.filter(date__gte = week_before)
+        # month = archives.filter(date__gte = month_before)
+        # year = archives.filter(date__gte = year_before)
         # print (week)
 
         for  i in week:
@@ -86,20 +104,20 @@ def main(request):
             'r_total': r_total,
             's_total': s_total,
             'total':l_total + d_total + r_total + s_total, 
-            'is_superuser': user.is_superuser, 
+            'is_superuser': request.user.is_superuser, 
             'user': request.user,
             'data': data
             }
         return render(request, 'budget.html', context)
     else:
-        cloned_drivers_id = Group.objects.filter(staff_id = user.id)
+        cloned_drivers_id = Group.objects.filter(staff_id = request.user.id)
         list_of_ids = []
         for i in cloned_drivers_id:
             list_of_ids.append(i.driver_id)
         queryset = Driver.objects.filter(id__in = list_of_ids).order_by('first_name')
         context = {
             'drivers': queryset, 
-            'is_superuser': user.is_superuser, 
+            'is_superuser': request.user.is_superuser, 
             'user': request.user,
             }
         return render(request, 'budget.html', context)
@@ -229,28 +247,37 @@ def driver_detail(request, id):
 def archive(request):
     log_edits = LogEdit.objects.all().values('edited_log')
     logEdits_list = list(map(lambda l: l['edited_log'], log_edits))
-    print(logEdits_list)
+    # print(logEdits_list)
     #
-    user = User.objects.get(username = request.user)
-    drivers = Driver.objects.all()
-    if user.is_superuser:
+    # user = User.objects.get(username = request.user)
+    # drivers = Driver.objects.all()
+    if request.user.is_superuser:
         queryset = Log.objects.all().filter(is_edited = False).order_by('-date')
     else:
-        queryset = Log.objects.filter(user = user, is_edited = False).order_by('-date')
+        in_group = Group.objects.filter(staff = request.user)
+        drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date')
+    
+    #preparing driver names
+    driver_ids = list(map(lambda q: q.driver_id, queryset))
+    driver_names = Driver.objects.filter(pk__in = driver_ids).values('id', 'first_name', 'last_name')
 
     for query in queryset:
         # driver = drivers.get(id = query.driver_id)
-        # query.name = driver.first_name + ' ' + driver.last_name
+        query.name = get_name(query.driver_id, driver_names)
         query.edited_link = False
-        print(query.id)
+        # print(query.id)
         if query.id in logEdits_list:
             query.edited_link = True
 
-    context = {'logs': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'many_drivers': True}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
 def driver_archive(request, id):
+    log_edits = LogEdit.objects.all().values('edited_log')
+    logEdits_list = list(map(lambda l: l['edited_log'], log_edits))
+    #
     driver = Driver.objects.get(pk = id)
 
     if request.user.is_superuser:
@@ -258,8 +285,13 @@ def driver_archive(request, id):
     else:
         queryset = Log.objects.filter(driver_id = id, is_edited = False).filter(user = request.user).order_by('-date')
 
-    # for query in queryset:
-    #     query.name = driver.first_name + ' ' + driver.last_name
+    for query in queryset:
+        # driver = drivers.get(id = query.driver_id)
+        # query.name = driver.first_name + ' ' + driver.last_name
+        query.edited_link = False
+        # print(query.id)
+        if query.id in logEdits_list:
+            query.edited_link = True
 
     context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver}
     return render(request, 'archive.html', context)
@@ -273,55 +305,66 @@ def archive_edits(request, id):
 
 @login_required(login_url='login')
 def edit_log(request, id):
+    message = ""
     user = User.objects.get(username = request.user)
     log = Log.objects.get(pk = id)
     log_form = LogForm(instance=log)
+    print(log_form.Meta.fields)
     if request.method == 'POST':
         data = request.POST
-        log.is_edited = True
-        log.save()
-        #getting back changed budget from driver
-        driver = Driver.objects.get(id = log.driver_id)
-        if log.budget_type == 'D':
-            driver.d_budget -= log.change
-        elif log.budget_type == 'L':
-            driver.l_budget -= log.change
-        elif log.budget_type == 'R':
-            driver.r_budget -= log.change
-        elif log.budget_type == 'S':
-            driver.s_budget -= log.change
-        driver.save()
-        #updating log
-        new_log = Log()
-        new_log.user = request.user
-        new_log.driver_id = data['driver']
-        new_log.change = Decimal(data['change'])
-        new_log.budget_type = data['budget_type']
-        new_log.bol_number = data['bol_number']
-        new_log.pcs_number = data['pcs_number']
-        new_log.note = data['note']
-        new_log.save()
+        #check if user selected its own driver
+        in_group = Group.objects.filter(staff = user)
+        drivers_list = list(map(lambda l: l.driver_id, in_group))
+        print(drivers_list)
+        print(data['driver'])
+        print(type(data['driver']))
+        if int(data['driver']) in drivers_list or user.is_superuser:
+            log.is_edited = True
+            log.save()
+            #getting back changed budget from driver
+            driver = Driver.objects.get(id = log.driver_id)
+            if log.budget_type == 'D':
+                driver.d_budget -= log.change
+            elif log.budget_type == 'L':
+                driver.l_budget -= log.change
+            elif log.budget_type == 'R':
+                driver.r_budget -= log.change
+            elif log.budget_type == 'S':
+                driver.s_budget -= log.change
+            driver.save()
+            #updating log
+            new_log = Log()
+            new_log.user = request.user
+            new_log.driver_id = data['driver']
+            new_log.change = Decimal(data['change'])
+            new_log.budget_type = data['budget_type']
+            new_log.bol_number = data['bol_number']
+            new_log.pcs_number = data['pcs_number']
+            new_log.note = data['note']
+            new_log.save()
 
-        #saving new changed budget to driver
-        driver = Driver.objects.get(id = new_log.driver_id)
-        if new_log.budget_type == 'D':
-            driver.d_budget += new_log.change
-        elif new_log.budget_type == 'L':
-            driver.l_budget += new_log.change
-        elif new_log.budget_type == 'R':
-            driver.r_budget += new_log.change
-        elif new_log.budget_type == 'S':
-            driver.s_budget += new_log.change
-        driver.save()
-        # print(new_log.id)
-        #saving log edition
-        log_edit = LogEdit.objects.create(original_log = log, edited_log = new_log)
-        log_edit.save()
+            #saving new changed budget to driver
+            driver = Driver.objects.get(id = new_log.driver_id)
+            if new_log.budget_type == 'D':
+                driver.d_budget += new_log.change
+            elif new_log.budget_type == 'L':
+                driver.l_budget += new_log.change
+            elif new_log.budget_type == 'R':
+                driver.r_budget += new_log.change
+            elif new_log.budget_type == 'S':
+                driver.s_budget += new_log.change
+            driver.save()
+            # print(new_log.id)
+            #saving log edition
+            log_edit = LogEdit.objects.create(original_log = log, edited_log = new_log)
+            log_edit.save()
 
-        # print(request.POST)
-        return redirect('archive')
+            # print(request.POST)
+            return redirect('archive')
+        else:
+            message = "you cant assign to this driver"
 
-    context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user}
+    context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user, 'message': message}
     return render(request, 'edit-log.html', context)
 
 
@@ -399,7 +442,10 @@ def budget(request, id):
     if request.method == 'POST':
         try:
             driver = Driver.objects.get(pk=id)
-            if user.is_superuser or driver.dispatcher_id == user.id or driver.updater_id == user.id:
+            in_group = Group.objects.filter(staff = user)
+            drivers_list = list(map(lambda l: l.driver_id, in_group))
+            print(drivers_list)
+            if user.is_superuser or driver.id in drivers_list:
                 amount = Decimal(request.data['amount'])
                 b_type = request.data['budget_type']
                 if b_type == 'D':
