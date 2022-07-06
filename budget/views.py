@@ -283,7 +283,9 @@ def driver_archive(request, id):
     if request.user.is_superuser:
         queryset = Log.objects.all().filter(driver_id = id, is_edited = False).order_by('-date')
     else:
-        queryset = Log.objects.filter(driver_id = id, is_edited = False).filter(user = request.user).order_by('-date')
+        in_group = Group.objects.filter(staff = request.user)
+        drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date')
 
     for query in queryset:
         # driver = drivers.get(id = query.driver_id)
@@ -299,7 +301,24 @@ def driver_archive(request, id):
 
 @login_required(login_url='login')
 def archive_edits(request, id):
-    pass
+    #selecting logs only related to given ID
+    editGroup = LogEdit.objects.all().order_by('-date') #values('original_log', 'edited_log')
+    nextPickID = id
+    pickedLogs = []
+    pickedLogs.append(id)
+    for g in editGroup:
+        if g.edited_log_id == nextPickID:
+            nextPickID = g.original_log_id
+            pickedLogs.append(nextPickID)
+    editedLogs = Log.objects.filter(pk__in = pickedLogs).order_by('-date')
+    #adding drivers name
+    driver_ids = list(map(lambda q: q.driver_id, editedLogs))
+    driver_names = Driver.objects.filter(pk__in = driver_ids).values('id', 'first_name', 'last_name')
+    for e_query in editedLogs:
+        e_query.name = get_name(e_query.driver_id, driver_names)
+
+    context = {'logs': editedLogs, 'is_superuser': request.user.is_superuser, 'user': request.user}
+    return render(request, 'edited-archive.html', context)
 
 
 

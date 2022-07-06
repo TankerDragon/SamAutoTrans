@@ -146,6 +146,13 @@ nav a {
   background-color: rgb(116, 131, 155);
   color: white;
 }
+.table table .first-row-highlited tr:first-child {
+  background-color: rgb(177, 226, 177);
+}
+.table table .first-row-highlited tr:first-child:hover {
+  background-color: rgb(116, 131, 155);
+  color: white;
+}
 .table table tbody .highLited {
   font-weight: bold;
   font-size: 1rem;

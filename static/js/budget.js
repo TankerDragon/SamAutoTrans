@@ -50,7 +50,7 @@ function activate_driver(id) {
   location.href = "/budget/activate-driver/" + id;
 }
 function edit_log(id) {
-  location.href = "/budget/edit_log/" + id;
+  location.href = "/budget/edit-log/" + id;
 }
 function submit() {
   fetch(current_driver, {

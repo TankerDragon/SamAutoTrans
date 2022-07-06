@@ -1,0 +1,35 @@
+{% extends 'budget-main.html' %} {% block content %} {% load static %}
+
+<div class="container">
+  <div class="table">
+    <h1>Edited History</h1>
+    <table>
+      <thead>
+        <td>Change</td>
+        <td>Driver's name</td>
+        <td>Budget type</td>
+        <td>Changed Time</td>
+        <td>Changed by</td>
+        <td>BOL number</td>
+        <td>PCS number</td>
+        <td>Notes</td>
+      </thead>
+      <tbody id="tbody" class="zebra first-row-highlited">
+        {% for log in logs %}
+        <tr>
+          <td>{{log.change}}</td>
+          <td>{{log.name}}</td>
+          <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% elif log.budget_type == 'S' %}Dirilis{% endif %} Budget</td>
+          <td>{{log.date}}</td>
+          <td>{{log.user}}</td>
+          <td>{{log.bol_number}}</td>
+          <td>{{log.pcs_number}}</td>
+          <td>{{log.note}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

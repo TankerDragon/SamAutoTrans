@@ -11,7 +11,7 @@ urlpatterns = [
     path('archive/', views.archive, name='archive'),
     path('archive/<int:id>', views.driver_archive),
     path('archive/edits/<int:id>', views.archive_edits, name='archive-edits'),
-    path('edit_log/<int:id>', views.edit_log),
+    path('edit-log/<int:id>', views.edit_log),
     path('deactivate-driver/<int:id>', views.deactivate_driver),
     path('activate-driver/<int:id>', views.activate_driver),
     path('<int:id>', views.budget),
