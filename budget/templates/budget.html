@@ -5,15 +5,18 @@
     {% if is_superuser %}
     <div class="row">
       <div class="table-container">
-        <h1>Budget statistics</h1>
+        <div class="row">
+          <h1>Budget statistics</h1>
+          <div class="date-inputs">
+            <input type="date" />
+            <input type="date" />
+          </div>
+        </div>
         <table>
           <thead>
             <tr>
               <td>Budget type</td>
               <td>Total Amount</td>
-              <td>Weekly change</td>
-              <td>Monthly change</td>
-              <td>Yearly change</td>
               <td></td>
             </tr>
           </thead>
@@ -21,9 +24,6 @@
             <tr>
               <td>Driver</td>
               <td>{{d_total}}</td>
-              <td>{{data.week.D}}</td>
-              <td>{{data.month.D}}</td>
-              <td>{{data.year.D}}</td>
               <td class="highLited" onclick="reset('D')">
                 <abbr title="Reset Driver budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
@@ -31,9 +31,6 @@
             <tr>
               <td>Lane</td>
               <td>{{l_total}}</td>
-              <td>{{data.week.L}}</td>
-              <td>{{data.month.L}}</td>
-              <td>{{data.year.L}}</td>
               <td class="highLited" onclick="reset('L')">
                 <abbr title="Reset Lane budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
@@ -41,9 +38,6 @@
             <tr>
               <td>Recovery</td>
               <td>{{r_total}}</td>
-              <td>{{data.week.R}}</td>
-              <td>{{data.month.R}}</td>
-              <td>{{data.year.R}}</td>
               <td class="highLited" onclick="reset('R')">
                 <abbr title="Reset Recovery budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
@@ -51,9 +45,6 @@
             <tr>
               <td>Dirilis</td>
               <td>{{s_total}}</td>
-              <td>{{data.week.S}}</td>
-              <td>{{data.month.S}}</td>
-              <td>{{data.year.S}}</td>
               <td class="highLited" onclick="reset('S')">
                 <abbr title="Reset Dirilis budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
@@ -61,9 +52,6 @@
             <tr>
               <td>Total</td>
               <td>{{total}}</td>
-              <td>{{data.week.T}}</td>
-              <td>{{data.month.T}}</td>
-              <td>{{data.year.T}}</td>
               <td></td>
             </tr>
           </tbody>

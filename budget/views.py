@@ -36,34 +36,34 @@ def main(request):
             s_total += query.s_budget
 
         ##################
-        data = {
-            "week": {
-                "D" : 0,
-                "L" : 0,
-                "R" : 0,
-                "S" : 0,
-                "T" : 0
-            },
-            "month": {
-                "D" : 0,
-                "L" : 0,
-                "R" : 0,
-                "S" : 0,
-                "T" : 0
-            },
-            "year": {
-                "D" : 0,
-                "L" : 0,
-                "R" : 0,
-                "S" : 0,
-                "T" : 0
-            }
-        }
-        archives = Log.objects.filter(is_edited = False).order_by('date')
-        today = datetime.datetime.today()
-        week_before = today - datetime.timedelta(days = 7)
-        month_before = today - datetime.timedelta(days = 30)
-        year_before = today - datetime.timedelta(days = 365)
+        # data = {
+        #     "week": {
+        #         "D" : 0,
+        #         "L" : 0,
+        #         "R" : 0,
+        #         "S" : 0,
+        #         "T" : 0
+        #     },
+        #     "month": {
+        #         "D" : 0,
+        #         "L" : 0,
+        #         "R" : 0,
+        #         "S" : 0,
+        #         "T" : 0
+        #     },
+        #     "year": {
+        #         "D" : 0,
+        #         "L" : 0,
+        #         "R" : 0,
+        #         "S" : 0,
+        #         "T" : 0
+        #     }
+        # }
+        # archives = Log.objects.filter(is_edited = False).order_by('date')
+        # today = datetime.datetime.today()
+        # week_before = today - datetime.timedelta(days = 7)
+        # month_before = today - datetime.timedelta(days = 30)
+        # year_before = today - datetime.timedelta(days = 365)
         #
         # week_before = datetime.datetime.strftime(today - datetime.timedelta(days = 7) , '%Y-%m-%d')  
         # month_before = datetime.datetime.strftime(today - datetime.timedelta(days = 30) , '%Y-%m-%d')
@@ -78,23 +78,23 @@ def main(request):
         # print(list(w))
         # for a in archives:
         #     print(a.date)
-        week = list(filter(lambda a: a.date > week_before, archives))
-        month = list(filter(lambda a: a.date > month_before, archives))
-        year = list(filter(lambda a: a.date > year_before, archives))
+        ## week = list(filter(lambda a: a.date > week_before, archives))
+        ## month = list(filter(lambda a: a.date > month_before, archives))
+        ## year = list(filter(lambda a: a.date > year_before, archives))
         # week = archives.filter(date__gte = week_before)
         # month = archives.filter(date__gte = month_before)
         # year = archives.filter(date__gte = year_before)
         # print (week)
 
-        for  i in week:
-            data['week'][i.budget_type] += i.change
-            data['week']['T'] += i.change
-        for  i in month:
-            data['month'][i.budget_type] += i.change
-            data['month']['T'] += i.change
-        for  i in year:
-            data['year'][i.budget_type] += i.change
-            data['year']['T'] += i.change
+        # for  i in week:
+        #     data['week'][i.budget_type] += i.change
+        #     data['week']['T'] += i.change
+        # for  i in month:
+        #     data['month'][i.budget_type] += i.change
+        #     data['month']['T'] += i.change
+        # for  i in year:
+        #     data['year'][i.budget_type] += i.change
+        #     data['year']['T'] += i.change
         
 
         context = {
@@ -106,7 +106,6 @@ def main(request):
             'total':l_total + d_total + r_total + s_total, 
             'is_superuser': request.user.is_superuser, 
             'user': request.user,
-            'data': data
             }
         return render(request, 'budget.html', context)
     else:

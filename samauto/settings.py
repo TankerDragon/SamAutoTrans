@@ -100,8 +100,8 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'root',
         'NAME': 'samauto',
-        # 'PASSWORD': '@akb21s4m$'
-        'PASSWORD': 'dragondD8090'
+        'PASSWORD': '@akb21s4m$'
+        # 'PASSWORD': 'dragondD8090'
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
