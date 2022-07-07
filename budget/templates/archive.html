@@ -9,13 +9,13 @@
     {% endif %}
     <table>
       <thead>
-        <td>Change</td>
+        <td onclick="sort(this, 0)" class="sortable">Change</td>
         {% if many_drivers == True %}
-        <td>Driver's name</td>
+        <td onclick="sort(this, 1)" class="sortable">Driver's name</td>
         {% endif %}
-        <td>Budget type</td>
+        <td onclick="sort(this, 2)" class="sortable">Budget type</td>
         <td>Changed Time</td>
-        <td>Changed by</td>
+        <td onclick="sort(this, 4)" class="sortable">Changed by</td>
         <td>BOL number</td>
         <td>PCS number</td>
         <td>Notes</td>
@@ -36,7 +36,7 @@
           <td>{{log.note}}</td>
           <td class="highLited">
             <abbr title="Edit"><i onclick="edit_log({{log.id}})" class="fa-solid fa-pen"></i></abbr>
-            {%if log.edited_link %}
+            {% if log.edited_link %}
             <a href="{% url 'archive-edits' log.id %}">edited</a>
             {% endif %}
           </td>

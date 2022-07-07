@@ -313,6 +313,14 @@ tbody.first-bold tr td:nth-child(2) {
 tbody.first-bold tr:hover td:nth-child(2) {
   background-color: rgb(116, 131, 155);
 }
+/* **************** */
+.sortable:hover {
+  cursor: pointer;
+}
+.sorted {
+  background-color: rgb(51, 64, 84);
+}
+/* **************** */
 @keyframes appear {
   0% {
     opacity: 0;
