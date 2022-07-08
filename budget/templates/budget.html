@@ -5,53 +5,71 @@
     {% if is_superuser %}
     <div class="row">
       <div class="table-container">
-        <div class="row">
-          <h1>Budget statistics</h1>
           <div class="date-inputs">
-            <input type="date" />
-            <input type="date" />
+            <label for="">
+              From: 
+              <input type="date" id="date1" />
+            </label>
+            <label for="">
+              To: 
+              <input type="date" id="date2" />
+            </label>
+            <label for="">
+              By: 
+              <select name="add_d" id="userInList">
+                <option value="" selected="">---------</option>
+                {% for user in usersList %}
+                <option value="{{user.username}}">{{user.username}}</option>
+                {%endfor%}
+              </select>
+            </label>
+            <span class="highLited">
+              <abbr title="Apply">
+                <i class="fa-solid fa-arrow-right" onclick="getBetweenDates()"></i>
+              </abbr>
+            </span>
           </div>
-        </div>
+          
         <table>
           <thead>
             <tr>
               <td>Budget type</td>
-              <td>Total Amount</td>
+              <td id="message">Total Amount</td>
               <td></td>
             </tr>
           </thead>
           <tbody class="first-bold">
             <tr>
               <td>Driver</td>
-              <td>{{d_total}}</td>
+              <td id="d_total">{{d_total}}</td>
               <td class="highLited" onclick="reset('D')">
                 <abbr title="Reset Driver budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
             </tr>
             <tr>
               <td>Lane</td>
-              <td>{{l_total}}</td>
+              <td id="l_total">{{l_total}}</td>
               <td class="highLited" onclick="reset('L')">
                 <abbr title="Reset Lane budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
             </tr>
             <tr>
               <td>Recovery</td>
-              <td>{{r_total}}</td>
+              <td id="r_total">{{r_total}}</td>
               <td class="highLited" onclick="reset('R')">
                 <abbr title="Reset Recovery budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
             </tr>
             <tr>
               <td>Dirilis</td>
-              <td>{{s_total}}</td>
+              <td id="s_total">{{s_total}}</td>
               <td class="highLited" onclick="reset('S')">
                 <abbr title="Reset Dirilis budget"><i class="fa-solid fa-trash-can"></i></abbr>
               </td>
             </tr>
             <tr>
               <td>Total</td>
-              <td>{{total}}</td>
+              <td id="total">{{total}}</td>
               <td></td>
             </tr>
           </tbody>

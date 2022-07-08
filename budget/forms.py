@@ -10,6 +10,8 @@ class UserForm(UserCreationForm):
         fields = ['username','first_name',
                   'last_name','user_type','is_active', 'password1', 'password2']
 
+
+
 class DriverForm(ModelForm):
     class Meta:
         model = Driver

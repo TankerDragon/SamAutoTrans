@@ -1,4 +1,3 @@
-from email import message
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
@@ -96,8 +95,11 @@ def main(request):
         #     data['year'][i.budget_type] += i.change
         #     data['year']['T'] += i.change
         
+        usersList = User.objects.filter(is_superuser = 0).values('username')
+
 
         context = {
+            'usersList': usersList,
             'drivers': queryset,
             'l_total': l_total,
             'd_total': d_total,
@@ -122,6 +124,35 @@ def main(request):
         return render(request, 'budget.html', context)
 
 
+@login_required(login_url='login')
+@api_view(['POST'])
+def getInDates(request):
+    data = {
+        "message": "",
+        "D" : 0,
+        "L" : 0,
+        "R" : 0,
+        "S" : 0,
+        "T" : 0
+    }
+    # print(request.data)
+    if request.data['start_date'] and request.data['end_date']:
+        start_date = datetime.datetime.strptime(request.data['start_date'], '%Y-%m-%d')
+        end_date = datetime.datetime.strptime(request.data['end_date'], '%Y-%m-%d')
+        if request.data['user']:
+            archives = Log.objects.filter(is_edited = False, user = request.data['user']).filter(date__gte = start_date, date__lte = end_date)
+            data['message'] = "from " + request.data['start_date'] + " to " + request.data['end_date'] + " by " + request.data['user']
+        else:
+            archives = Log.objects.filter(is_edited = False).filter(date__gte = start_date, date__lte = end_date)
+            data['message'] = "from " + request.data['start_date'] + " to " + request.data['end_date']
+        # print(data)
+        for a in archives:
+            data[a.budget_type] += a.change
+            data["T"] += a.change
+
+        return Response(data)
+    data['message'] = "*** Date is not selected! ***"
+    return Response(data)
 
 @login_required(login_url='login')
 def users(request):

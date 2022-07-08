@@ -62,6 +62,64 @@ function sort(e, index) {
   }
 
 }
+function getBetweenDates() {
+  var input1 = document.getElementById('date1');
+  var input2 = document.getElementById('date2');
+  var user = document.getElementById('userInList');
+
+  fetch("between-dates/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCSRF(),
+    },
+    body: JSON.stringify({
+      start_date: input1.value,
+      end_date: input2.value,
+      user: user.value
+    }),
+  })
+    .catch((error) => {
+      window.alert(error);
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("****************");
+      console.log(data);
+      document.getElementById("message").innerText = data.message;
+      document.getElementById("d_total").innerText = data.D;
+      document.getElementById("l_total").innerText = data.L;
+      document.getElementById("r_total").innerText = data.R;
+      document.getElementById("s_total").innerText = data.S;
+      document.getElementById("total").innerText = data.T;
+      //
+      var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        title: {
+          text: data.message,
+          horizontalAlign: "center",
+        },
+        data: [
+          {
+            theme: "dark2",
+            type: "doughnut",
+            startAngle: 60,
+            innerRadius: 60,
+            indexLabelFontSize: 17,
+            indexLabel: "{label} (#percent%)",
+            toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+            dataPoints: [
+              { y: data.D === 0 ? 0 : data.D, label: "Driver Budget" },
+              { y: data.L === 0 ? 0 : data.L, label: "Lane Budget" },
+              { y: data.R === 0 ? 0 : data.R, label: "Recovery Budget" },
+              { y: data.S === 0 ? 0 : data.S, label: "Dirilis Budget" },
+            ],
+          },
+        ],
+      });
+      chart.render();
+    });
+}
 function modify(e, id) {
   current_driver = id;
   // var this_row = e.parentElement.parentElement;

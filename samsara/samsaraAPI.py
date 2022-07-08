@@ -188,7 +188,7 @@ def loop():
     # print(data)
     # print("###################################")
 
-# loopControl.start_looping()
+loopControl.start_looping()
 
 # {'id': 281474979933674, 'name': 'T-1030', 'assetSerialNumber': None, 'engineHours': 0, 'cable': {'assetType': 'Trailer'}, 'location': [{'location': '25 Bond 
 # Street, Haverhill, MA, 01832', 'latitude': 42.75900362, 'longitude': -71.11928433, 'speedMilesPerHour': 0, 'timeMs': 1653584955036}]}
