@@ -9,8 +9,8 @@ from django.contrib.auth.models import User
 from .serializers import DriverSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
-import datetime
 from django.db.models import Q
+import datetime
 #funtions 
 def get_name(id, arr):
     for a in arr:
@@ -138,7 +138,7 @@ def getInDates(request):
     # print(request.data)
     if request.data['start_date'] and request.data['end_date']:
         start_date = datetime.datetime.strptime(request.data['start_date'], '%Y-%m-%d')
-        end_date = datetime.datetime.strptime(request.data['end_date'], '%Y-%m-%d')
+        end_date = datetime.datetime.strptime(request.data['end_date'], '%Y-%m-%d') + datetime.timedelta(days=1)
         if request.data['user']:
             archives = Log.objects.filter(is_edited = False, user = request.data['user']).filter(date__gte = start_date, date__lte = end_date)
             data['message'] = "from " + request.data['start_date'] + " to " + request.data['end_date'] + " by " + request.data['user']

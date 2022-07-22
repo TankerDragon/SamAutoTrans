@@ -25,9 +25,10 @@ urlpatterns = [
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
     path('budget/', include('budget.urls')),
-    path('eld/', include('eld.urls')),
-    path('samsara/', include('samsara.urls')),
-    path('telesam/', include('telesam.urls')),
+    path('trailers/', include('trailers.urls')),
+    # path('eld/', include('eld.urls')),
+    # path('samsara/', include('samsara.urls')),
+    # path('telesam/', include('telesam.urls')),
     path('no-access/', views.noAccess, name='no-access'),
     path('__debug__/', include(debug_toolbar.urls))
 ]

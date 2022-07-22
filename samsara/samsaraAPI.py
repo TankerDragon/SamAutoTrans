@@ -1,4 +1,3 @@
-import numbers
 import requests
 import threading
 import time 
@@ -94,6 +93,8 @@ loopControl = Control()
 
 def update_units():
     response = requests.request("GET", units_url, headers=headers, params=params).json()
+    print('***************')
+    print(response)
     for r in response['data']:
         is_present = False
         # print(i)
@@ -188,7 +189,20 @@ def loop():
     # print(data)
     # print("###################################")
 
-loopControl.start_looping()
+# loopControl.start_looping()
+
+
+
+
+
+#
+#
+#
+#
+#
+#
+# 
+# 
 
 # {'id': 281474979933674, 'name': 'T-1030', 'assetSerialNumber': None, 'engineHours': 0, 'cable': {'assetType': 'Trailer'}, 'location': [{'location': '25 Bond 
 # Street, Haverhill, MA, 01832', 'latitude': 42.75900362, 'longitude': -71.11928433, 'speedMilesPerHour': 0, 'timeMs': 1653584955036}]}

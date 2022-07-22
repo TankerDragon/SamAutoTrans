@@ -39,16 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'budget',
-    'eld',
-    'telesam',
-    'samsara',
+    'trailers',
+    # 'eld',
+    # 'telesam',
+    # 'samsara',
     'main',
     'debug_toolbar'
 ]
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -62,6 +65,9 @@ INTERNAL_IPS = [
     # ...
     "127.0.0.1",
     # ...
+]
+CORS_ALLOWED_ORIGINS  = [
+    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = 'samauto.urls'
@@ -100,8 +106,8 @@ DATABASES = {
         'HOST': 'localhost',
         'USER': 'root',
         'NAME': 'samauto',
-        # 'PASSWORD': '@akb21s4m$'
-        'PASSWORD': 'dragondD8090'
+        'PASSWORD': '@akb21s4m$'
+        # 'PASSWORD': 'dragondD8090'
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
