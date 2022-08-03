@@ -6,8 +6,17 @@ from .models import Trailer
 from .serializers import TrailerSerializer
 
 # Create your views here.
+# def trailers(request):
+#     queryset = Trailer.objects.all()
+
+#     context = {
+#         'trailers' : queryset,
+#         'category' : 'trailers'
+#     }
+#     return render(request, "trailers.html", context)
+
 @api_view(['GET', 'POST'])
-def getTrailers(request):
+def trailers(request):
     if request.method == 'GET':
         queryset = Trailer.objects.all()
         serializer = TrailerSerializer(queryset, many=True)
@@ -15,7 +24,6 @@ def getTrailers(request):
     elif request.method == 'POST':
         serializer = TrailerSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.validated_data
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         else:

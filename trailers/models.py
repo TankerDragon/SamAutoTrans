@@ -8,7 +8,7 @@ TRAILER_TYPE = (
     ('o', 'Other'),
 )
 OPERATION = (
-    (1, 'Pick Up'),
+    (1, 'Hook'),
     (0, 'Drop')
 )
 # Create your models here.

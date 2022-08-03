@@ -21,7 +21,7 @@ class DriverForm(ModelForm):
 class LogForm(ModelForm):
     class Meta:
         model  = Log
-        fields = ['driver', 'change', 'budget_type', 'bol_number', 'pcs_number', 'note']
+        fields = ['driver', 'original_rate', 'current_rate', 'budget_type', 'bol_number', 'pcs_number', 'note']
 
 
 

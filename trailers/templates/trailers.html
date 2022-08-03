@@ -1,0 +1,37 @@
+{% extends 'trailers-main.html' %}{% load static %} {% block content %}
+<div class="container">
+  <div class="row">
+    <h2>Logs</h2>
+    <a href=""></a>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <td>№</td>
+        <td>ID</td>
+        <td>Unit number</td>
+        <td>Trailer type</td>
+        <td>Plate number</td>
+        <td>note</td>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      {% if trailers %} {% for trailer in trailers %}
+      <tr>
+        <td>n*</td>
+        <td>{{trailer.id}}</td>
+        <td>{{trailer.unit_number}}</td>
+        <td>{{trailer.type}}</td>
+        <td>{{trailer.plate_number}}</td>
+        <td>{{trailer.note}}</td>
+      </tr>
+
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="12">no records found</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

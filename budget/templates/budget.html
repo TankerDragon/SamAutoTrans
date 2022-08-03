@@ -5,31 +5,31 @@
     {% if is_superuser %}
     <div class="row">
       <div class="table-container">
-          <div class="date-inputs">
-            <label for="">
-              From: 
-              <input type="date" id="date1" />
-            </label>
-            <label for="">
-              To: 
-              <input type="date" id="date2" />
-            </label>
-            <label for="">
-              By: 
-              <select name="add_d" id="userInList">
-                <option value="" selected="">---------</option>
-                {% for user in usersList %}
-                <option value="{{user.username}}">{{user.username}}</option>
-                {%endfor%}
-              </select>
-            </label>
-            <span class="highLited">
-              <abbr title="Apply">
-                <i class="fa-solid fa-arrow-right" onclick="getBetweenDates()"></i>
-              </abbr>
-            </span>
-          </div>
-          
+        <div class="date-inputs">
+          <label for="">
+            From:
+            <input type="date" id="date1" />
+          </label>
+          <label for="">
+            To:
+            <input type="date" id="date2" />
+          </label>
+          <label for="">
+            By:
+            <select name="add_d" id="userInList">
+              <option value="" selected="">---------</option>
+              {% for user in usersList %}
+              <option value="{{user.username}}">{{user.username}}</option>
+              {%endfor%}
+            </select>
+          </label>
+          <span class="highLited">
+            <abbr title="Apply">
+              <i class="fa-solid fa-arrow-right" onclick="getBetweenDates()"></i>
+            </abbr>
+          </span>
+        </div>
+
         <table>
           <thead>
             <tr>
@@ -85,14 +85,14 @@
     </div>
     <table>
       <thead class="sticky">
-        <td onclick="sort(this, 0)" class="sortable">First name</td>
-        <td onclick="sort(this, 1)" class="sortable">Last name</td>
-        <td onclick="sort(this, 2)" class="sortable">Driver type</td>
-        <td onclick="sort(this, 3)" class="sortable">Driver's Budget</td>
-        <td onclick="sort(this, 4)" class="sortable">Lane Budget</td>
-        <td onclick="sort(this, 5)" class="sortable">Recovery Budget</td>
-        <td onclick="sort(this, 6)" class="sortable">Dirilis Budget</td>
-        <td onclick="sort(this, 7)" class="sortable">Total Budget</td>
+        <td onclick="sort(this)" class="sortable">First name</td>
+        <td onclick="sort(this)" class="sortable">Last name</td>
+        <td onclick="sort(this)" class="sortable">Driver type</td>
+        <td onclick="sort(this)" class="sortable">Driver's Budget</td>
+        <td onclick="sort(this)" class="sortable">Lane Budget</td>
+        <td onclick="sort(this)" class="sortable">Recovery Budget</td>
+        <td onclick="sort(this)" class="sortable">Dirilis Budget</td>
+        <td onclick="sort(this)" class="sortable">Total Budget</td>
         <td>Actions</td>
       </thead>
       <tbody id="tbody">
@@ -100,7 +100,10 @@
         <tr>
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
-          <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
+          <td>
+            {% if driver.driver_type == "O88" %}Owner operator - 88% {% elif driver.driver_type == "O85" %}Owner operator - 85% {% elif driver.driver_type == "C30" %}Company driver - 30% {% elif
+            driver.driver_type == "C35" %}Company driver - 35% {% elif driver.driver_type == "L**" %}Lease operator {% elif driver.driver_type == "R**" %}Rental operator{%endif%}
+          </td>
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
@@ -161,8 +164,12 @@
     <div id="csrf">{% csrf_token %}</div>
     <label for="f-name">Full name:</label>
     <div id="full-name"></div>
-    <label for="amount">Change of amount:</label>
-    <input id="input-amount" type="number" />
+    <label for="original-rate">Original rate:</label>
+    <input id="original-rate" type="number" />
+    <label for="current-rate">Current rate:</label>
+    <input id="current-rate" type="number" />
+    <label for="amount" id="amount-message" style="color: blue">no change</label>
+    <input id="input-amount" type="number" readonly />
     <label for="b-type">Budget type:</label>
     <select name="budget-type" id="budget-type">
       <option value="D">Driver's Budget</option>

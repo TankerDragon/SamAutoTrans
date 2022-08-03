@@ -1,26 +1,51 @@
 const form = document.getElementById("form");
 let disappeared = false;
 let current_driver;
+
+//
+function changeAmount() {
+  let change =
+    document.getElementById("original-rate").value != "" && document.getElementById("current-rate").value != ""
+      ? parseFloat(document.getElementById("original-rate").value) - parseFloat(document.getElementById("current-rate").value)
+      : 0;
+  change = Math.round(change * 100) / 100;
+  document.getElementById("input-amount").value = change;
+  document.getElementById("input-amount").style.backgroundColor = change < 0 ? "#fcd9d9" : change > 0 ? "#e2fae1" : "white";
+  document.getElementById("amount-message").style.color = change < 0 ? "red" : change > 0 ? "green" : "blue";
+  document.getElementById("amount-message").innerText = change < 0 ? "overpaid" : change > 0 ? "saved" : "no change";
+}
+document.getElementById("original-rate").addEventListener("input", () => {
+  changeAmount();
+});
+document.getElementById("current-rate").addEventListener("input", () => {
+  changeAmount();
+});
+
+//
 function exists(arr, e) {
-  for(let i = 0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (e == arr[i]) {
       return true;
     }
   }
   return false;
 }
-function sort(e, index) {
-  // console.log(e.parentElement.children.indexOf(e));
+function getChildIndex(node) {
+  return Array.prototype.indexOf.call(node.parentElement.children, node);
+}
+function sort(e) {
+  index = getChildIndex(e);
+
   //
   var parentRow = e.parentElement;
   for (let i = 0; i < parentRow.children.length; i++) {
-    if (exists(parentRow.children[i].classList, "sorted") && parentRow.children[i] !== e){
+    if (exists(parentRow.children[i].classList, "sorted") && parentRow.children[i] !== e) {
       parentRow.children[i].classList.toggle("sorted");
     }
   }
-  
+
   e.classList.toggle("sorted");
-  // 
+  //
   var table, rows, switching, i, x, y, shouldSwitch;
   table = e.parentElement.parentElement.parentElement;
   switching = true;
@@ -32,7 +57,7 @@ function sort(e, index) {
     rows = table.rows;
     /* Loop through all table rows (except the
     first, which contains table headers): */
-    for (i = 1; i < (rows.length - 1); i++) {
+    for (i = 1; i < rows.length - 1; i++) {
       // Start by saying there should be no switching:
       shouldSwitch = false;
       /* Get the two elements you want to compare,
@@ -43,9 +68,9 @@ function sort(e, index) {
       if (exists(e.classList, "sorted")) {
         if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
           shouldSwitch = true;
-        break;
-      }}
-      else {
+          break;
+        }
+      } else {
         if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
           // If so, mark as a switch and break the loop:
           shouldSwitch = true;
@@ -60,12 +85,11 @@ function sort(e, index) {
       switching = true;
     }
   }
-
 }
 function getBetweenDates() {
-  var input1 = document.getElementById('date1');
-  var input2 = document.getElementById('date2');
-  var user = document.getElementById('userInList');
+  var input1 = document.getElementById("date1");
+  var input2 = document.getElementById("date2");
+  var user = document.getElementById("userInList");
 
   fetch("between-dates/", {
     method: "POST",
@@ -76,7 +100,7 @@ function getBetweenDates() {
     body: JSON.stringify({
       start_date: input1.value,
       end_date: input2.value,
-      user: user.value
+      user: user.value,
     }),
   })
     .catch((error) => {
@@ -84,7 +108,7 @@ function getBetweenDates() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log("****************");
+      console.log("data***");
       console.log(data);
       document.getElementById("message").innerText = data.message;
       document.getElementById("d_total").innerText = data.D;
@@ -119,6 +143,15 @@ function getBetweenDates() {
       });
       chart.render();
     });
+}
+function getArchiveBetweenDates() {
+  var start_date = document.getElementById("date1");
+  var end_date = document.getElementById("date2");
+  if (start_date.value && end_date.value) {
+    location.href = `/budget/archive-between-dates/${start_date.value}&${end_date.value}`;
+  } else {
+    window.alert("Please complete dates input");
+  }
 }
 function modify(e, id) {
   current_driver = id;
@@ -179,7 +212,9 @@ function submit() {
       "X-CSRFToken": getCSRF(),
     },
     body: JSON.stringify({
-      amount: parseFloat(document.getElementById("input-amount").value),
+      original_rate: document.getElementById("original-rate").value,
+      current_rate: document.getElementById("current-rate").value,
+      // amount: parseFloat(document.getElementById("input-amount").value),
       budget_type: document.getElementById("budget-type").value,
       bol_number: document.getElementById("bol-number").value,
       pcs_number: document.getElementById("pcs-number").value,
@@ -196,7 +231,9 @@ function submit() {
       if (data.status != 200) {
         window.alert("Uncompleted Submit!!!");
       } else {
-        document.getElementById("input-amount").value = "";
+        document.getElementById("original-rate").value = "";
+        document.getElementById("current-rate").value = "";
+        // document.getElementById("input-amount").value = "";
         document.getElementById("budget-type").value = "D";
         document.getElementById("bol-number").value = "";
         document.getElementById("pcs-number").value = "";

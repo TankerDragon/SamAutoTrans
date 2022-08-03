@@ -7,15 +7,33 @@
     {% else %}
     <h2>{{name}}</h2>
     {% endif %}
+    <div class="date-inputs" style="max-width: 600px">
+      <label for="">
+        From:
+        <input type="date" id="date1" />
+      </label>
+      <label for="">
+        To:
+        <input type="date" id="date2" />
+      </label>
+      <span class="highLited">
+        <abbr title="Apply">
+          <i class="fa-solid fa-arrow-right" onclick="getArchiveBetweenDates()"></i>
+        </abbr>
+      </span>
+    </div>
+
     <table>
       <thead>
-        <td onclick="sort(this, 0)" class="sortable">Change</td>
+        <td onclick="sort(this)" class="sortable">Original rate</td>
+        <td onclick="sort(this)" class="sortable">Current rate</td>
+        <td onclick="sort(this)" class="sortable">Change</td>
         {% if many_drivers == True %}
-        <td onclick="sort(this, 1)" class="sortable">Driver's name</td>
+        <td onclick="sort(this)" class="sortable">Driver's name</td>
         {% endif %}
-        <td onclick="sort(this, 2)" class="sortable">Budget type</td>
+        <td onclick="sort(this)" class="sortable">Budget type</td>
         <td>Changed Time</td>
-        <td onclick="sort(this, 4)" class="sortable">Changed by</td>
+        <td onclick="sort(this)" class="sortable">Changed by</td>
         <td>BOL number</td>
         <td>PCS number</td>
         <td>Notes</td>
@@ -24,6 +42,8 @@
       <tbody id="tbody" class="zebra">
         {% for log in logs %}
         <tr>
+          <td>{{log.original_rate}}</td>
+          <td>{{log.current_rate}}</td>
           <td>{{log.change}}</td>
           {% if many_drivers == True %}
           <td>{{log.name}}</td>

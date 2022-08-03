@@ -10,6 +10,7 @@ urlpatterns = [
     path('new-driver/', views.new_driver, name='new-driver'),
     path('driver-detail/<int:id>', views.driver_detail),
     path('archive/', views.archive, name='archive'),
+    path('archive-between-dates/<startDate>&<endDate>', views.archiveBetweenDates),
     path('archive/<int:id>', views.driver_archive),
     path('archive/edits/<int:id>', views.archive_edits, name='archive-edits'),
     path('edit-log/<int:id>', views.edit_log),

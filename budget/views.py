@@ -286,7 +286,40 @@ def archive(request):
     else:
         in_group = Group.objects.filter(staff = request.user)
         drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date')
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date') #, user=request.user
+    
+    #preparing driver names
+    driver_ids = list(map(lambda q: q.driver_id, queryset))
+    driver_names = Driver.objects.filter(pk__in = driver_ids).values('id', 'first_name', 'last_name')
+
+    for query in queryset:
+        # driver = drivers.get(id = query.driver_id)
+        query.name = get_name(query.driver_id, driver_names)
+        query.edited_link = False
+        # print(query.id)
+        if query.id in logEdits_list:
+            query.edited_link = True
+
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True}
+    return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
+def archiveBetweenDates(request, startDate, endDate):
+    start_date = datetime.datetime.strptime(startDate, '%Y-%m-%d')
+    end_date = datetime.datetime.strptime(endDate, '%Y-%m-%d') + datetime.timedelta(days=1)
+
+    log_edits = LogEdit.objects.all().values('edited_log')
+    logEdits_list = list(map(lambda l: l['edited_log'], log_edits))
+    # print(logEdits_list)
+    #
+    # user = User.objects.get(username = request.user)
+    # drivers = Driver.objects.all()
+    if request.user.is_superuser:
+        queryset = Log.objects.all().filter(is_edited = False, date__gte = start_date, date__lte = end_date).order_by('-date')
+    else:
+        in_group = Group.objects.filter(staff = request.user)
+        drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False, date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
     
     #preparing driver names
     driver_ids = list(map(lambda q: q.driver_id, queryset))
@@ -315,7 +348,7 @@ def driver_archive(request, id):
     else:
         in_group = Group.objects.filter(staff = request.user)
         drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date')
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date') #, user=request.user
 
     for query in queryset:
         # driver = drivers.get(id = query.driver_id)
@@ -358,15 +391,11 @@ def edit_log(request, id):
     user = User.objects.get(username = request.user)
     log = Log.objects.get(pk = id)
     log_form = LogForm(instance=log)
-    print(log_form.Meta.fields)
     if request.method == 'POST':
         data = request.POST
         #check if user selected its own driver
         in_group = Group.objects.filter(staff = user)
         drivers_list = list(map(lambda l: l.driver_id, in_group))
-        print(drivers_list)
-        print(data['driver'])
-        print(type(data['driver']))
         if int(data['driver']) in drivers_list or user.is_superuser:
             log.is_edited = True
             log.save()
@@ -382,10 +411,13 @@ def edit_log(request, id):
                 driver.s_budget -= log.change
             driver.save()
             #updating log
+            change_new_log = Decimal(data['original_rate']) - Decimal(data['current_rate'])
             new_log = Log()
             new_log.user = request.user
             new_log.driver_id = data['driver']
-            new_log.change = Decimal(data['change'])
+            new_log.original_rate = Decimal(data['original_rate'])
+            new_log.current_rate = Decimal(data['current_rate'])
+            new_log.change = change_new_log
             new_log.budget_type = data['budget_type']
             new_log.bol_number = data['bol_number']
             new_log.pcs_number = data['pcs_number']
@@ -395,13 +427,13 @@ def edit_log(request, id):
             #saving new changed budget to driver
             driver = Driver.objects.get(id = new_log.driver_id)
             if new_log.budget_type == 'D':
-                driver.d_budget += new_log.change
+                driver.d_budget += change_new_log
             elif new_log.budget_type == 'L':
-                driver.l_budget += new_log.change
+                driver.l_budget += change_new_log
             elif new_log.budget_type == 'R':
-                driver.r_budget += new_log.change
+                driver.r_budget += change_new_log
             elif new_log.budget_type == 'S':
-                driver.s_budget += new_log.change
+                driver.s_budget += change_new_log
             driver.save()
             # print(new_log.id)
             #saving log edition
@@ -479,6 +511,7 @@ def reset(request, type):
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])
 def budget(request, id):
+    print(request.data)
     # if request.method == 'GET':
     #     try:
     #         queryset = Driver.objects.get(pk = id)
@@ -493,9 +526,11 @@ def budget(request, id):
             driver = Driver.objects.get(pk=id)
             in_group = Group.objects.filter(staff = user)
             drivers_list = list(map(lambda l: l.driver_id, in_group))
-            print(drivers_list)
+            # print(drivers_list)
             if user.is_superuser or driver.id in drivers_list:
-                amount = Decimal(request.data['amount'])
+                original_rate = Decimal(request.data['original_rate'])
+                current_rate = Decimal(request.data['current_rate'])
+                amount = original_rate - current_rate
                 b_type = request.data['budget_type']
                 if b_type == 'D':
                     driver.d_budget += amount
@@ -506,7 +541,7 @@ def budget(request, id):
                 elif b_type == 'S':
                     driver.s_budget += amount
                 driver.save()
-                log = Log(driver=driver, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
+                log = Log(driver=driver, original_rate = original_rate, current_rate = current_rate, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
                 log.save()
                 return Response(status=status.HTTP_200_OK)
             else:
