@@ -10,4 +10,8 @@ class CreateUserForm(UserCreationForm):
         fields = ['username', 'email', 'first_name',
                   'last_name', 'password1', 'password2']
 
+class PasswordResetForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['password1', 'password2']
 

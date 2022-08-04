@@ -23,7 +23,10 @@ class LogForm(ModelForm):
         model  = Log
         fields = ['driver', 'original_rate', 'current_rate', 'budget_type', 'bol_number', 'pcs_number', 'note']
 
-
+class PasswordResetForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['password1', 'password2']
 
 
 # class AmountChangeForm(ModelForm):

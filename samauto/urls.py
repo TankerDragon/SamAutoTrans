@@ -24,6 +24,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),
+    path('password-reset/', views.password_reset, name='password-reset'),
     path('budget/', include('budget.urls')),
     path('trailers/', include('trailers.urls')),
     # path('eld/', include('eld.urls')),

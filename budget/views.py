@@ -18,6 +18,7 @@ def get_name(id, arr):
             return a['first_name'] + ' ' + a['last_name']
     return '*name not found'
 # Create your views here.
+
 @login_required(login_url='login')
 def main(request):
     # user = User.objects.get(username = request.user)
