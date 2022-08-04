@@ -14,6 +14,7 @@ abbr {
   width: 90%;
   margin: auto;
 }
+
 .row {
   width: 100%;
   margin-top: 30px;
@@ -376,6 +377,12 @@ tbody.first-bold tr:hover td:nth-child(2) {
 }
 .sorted {
   background-color: rgb(51, 64, 84);
+}
+.bold-field {
+  font-weight: bold;
+}
+.align-right {
+  text-align: right;
 }
 /* **************** */
 @keyframes appear {

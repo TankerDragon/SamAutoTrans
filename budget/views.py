@@ -337,6 +337,39 @@ def archiveBetweenDates(request, startDate, endDate):
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
+def archiveBetweenDatesBy(request, id, startDate, endDate):
+    print(request)
+    print(startDate)
+    print(endDate)
+    print(id)
+
+    start_date = datetime.datetime.strptime(startDate, '%Y-%m-%d')
+    end_date = datetime.datetime.strptime(endDate, '%Y-%m-%d') + datetime.timedelta(days=1)
+
+    log_edits = LogEdit.objects.all().values('edited_log')
+    logEdits_list = list(map(lambda l: l['edited_log'], log_edits))
+    #
+    driver = Driver.objects.get(pk = id)
+
+    if request.user.is_superuser:
+        queryset = Log.objects.all().filter(driver_id = id, is_edited = False,  date__gte = start_date, date__lte = end_date).order_by('-date')
+    else:
+        in_group = Group.objects.filter(staff = request.user)
+        drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False,  date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
+
+    for query in queryset:
+        # driver = drivers.get(id = query.driver_id)
+        # query.name = driver.first_name + ' ' + driver.last_name
+        query.edited_link = False
+        # print(query.id)
+        if query.id in logEdits_list:
+            query.edited_link = True
+
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver}
+    return render(request, 'archive.html', context)
+
+@login_required(login_url='login')
 def driver_archive(request, id):
     log_edits = LogEdit.objects.all().values('edited_log')
     logEdits_list = list(map(lambda l: l['edited_log'], log_edits))

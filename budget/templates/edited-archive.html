@@ -19,9 +19,9 @@
       <tbody id="tbody" class="zebra first-row-highlited">
         {% for log in logs %}
         <tr>
-          <td>{{log.original_rate}}</td>
-          <td>{{log.current_rate}}</td>
-          <td>{{log.change}}</td>
+          <td class="align-right">{{log.original_rate}}</td>
+          <td class="align-right">{{log.current_rate}}</td>
+          <td class="bold-field align-right">{{log.change}}</td>
           <td>{{log.name}}</td>
           <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% elif log.budget_type == 'S' %}Dirilis{% endif %} Budget</td>
           <td>{{log.date}}</td>

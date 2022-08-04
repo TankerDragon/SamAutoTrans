@@ -147,8 +147,13 @@ function getBetweenDates() {
 function getArchiveBetweenDates() {
   var start_date = document.getElementById("date1");
   var end_date = document.getElementById("date2");
+  // filter_by =  ? window.location.href.split("/")[5] : "all";
   if (start_date.value && end_date.value) {
-    location.href = `/budget/archive-between-dates/${start_date.value}&${end_date.value}`;
+    if (document.getElementById("byDriver")) {
+      location.href = `/budget/archive-between-dates/${window.location.href.split("/")[5]}/${start_date.value}&${end_date.value}`;
+    } else {
+      location.href = `/budget/archive-between-dates/${start_date.value}&${end_date.value}`;
+    }
   } else {
     window.alert("Please complete dates input");
   }

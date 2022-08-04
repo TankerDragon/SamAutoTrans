@@ -16,6 +16,10 @@
         To:
         <input type="date" id="date2" />
       </label>
+      {% if many_drivers == False %}
+      <label for="" id="byDriver"> By this driver </label>
+      {% endif %}
+
       <span class="highLited">
         <abbr title="Apply">
           <i class="fa-solid fa-arrow-right" onclick="getArchiveBetweenDates()"></i>
@@ -42,9 +46,9 @@
       <tbody id="tbody" class="zebra">
         {% for log in logs %}
         <tr>
-          <td>{{log.original_rate}}</td>
-          <td>{{log.current_rate}}</td>
-          <td>{{log.change}}</td>
+          <td class="align-right">{{log.original_rate}}</td>
+          <td class="align-right">{{log.current_rate}}</td>
+          <td class="bold-field align-right">{{log.change}}</td>
           {% if many_drivers == True %}
           <td>{{log.name}}</td>
           {% endif %}
