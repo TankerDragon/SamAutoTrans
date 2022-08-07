@@ -5,10 +5,11 @@
     <h1>Edited History</h1>
     <table>
       <thead>
+        <td>Driver's name</td>
         <td>Original rate</td>
         <td>Current rate</td>
         <td>Change</td>
-        <td>Driver's name</td>
+        <td>Mileage</td>
         <td>Budget type</td>
         <td>Changed Time</td>
         <td>Changed by</td>
@@ -19,10 +20,11 @@
       <tbody id="tbody" class="zebra first-row-highlited">
         {% for log in logs %}
         <tr>
+          <td>{{log.name}}</td>
           <td class="align-right">{{log.original_rate}}</td>
           <td class="align-right">{{log.current_rate}}</td>
           <td class="bold-field align-right">{{log.change}}</td>
-          <td>{{log.name}}</td>
+          <td class="align-right">{{log.total_miles}}</td>
           <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% elif log.budget_type == 'S' %}Dirilis{% endif %} Budget</td>
           <td>{{log.date}}</td>
           <td>{{log.user}}</td>

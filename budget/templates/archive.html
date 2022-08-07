@@ -29,12 +29,13 @@
 
     <table>
       <thead>
-        <td onclick="sort(this)" class="sortable">Original rate</td>
-        <td onclick="sort(this)" class="sortable">Current rate</td>
-        <td onclick="sort(this)" class="sortable">Change</td>
         {% if many_drivers == True %}
         <td onclick="sort(this)" class="sortable">Driver's name</td>
         {% endif %}
+        <td onclick="sort(this)" class="sortable">Original rate</td>
+        <td onclick="sort(this)" class="sortable">Current rate</td>
+        <td onclick="sort(this)" class="sortable">Change</td>
+        <td onclick="sort(this)" class="sortable">Mileage</td>
         <td onclick="sort(this)" class="sortable">Budget type</td>
         <td>Changed Time</td>
         <td onclick="sort(this)" class="sortable">Changed by</td>
@@ -46,12 +47,13 @@
       <tbody id="tbody" class="zebra">
         {% for log in logs %}
         <tr>
-          <td class="align-right">{{log.original_rate}}</td>
-          <td class="align-right">{{log.current_rate}}</td>
-          <td class="bold-field align-right">{{log.change}}</td>
           {% if many_drivers == True %}
           <td>{{log.name}}</td>
           {% endif %}
+          <td class="align-right">{{log.original_rate}}</td>
+          <td class="align-right">{{log.current_rate}}</td>
+          <td class="bold-field align-right">{{log.change}}</td>
+          <td class="align-right">{{log.total_miles}}</td>
           <td>{% if log.budget_type == 'D' %}Driver's{% elif log.budget_type == 'L' %}Lane{% elif log.budget_type == 'R' %}Recovery{% elif log.budget_type == 'S' %}Dirilis{% endif %} Budget</td>
           <td>{{log.date}}</td>
           <td>{{log.user}}</td>

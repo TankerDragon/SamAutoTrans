@@ -163,7 +163,9 @@ function modify(e, id) {
   // var this_row = e.parentElement.parentElement;
   // var rows = document.getElementById("tbody").children;
   // console.log(Array.prototype.indexOf.call(rows, this_row));
-  document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
+  //
+  // document.getElementById("full-name").innerHTML = `<h3>${e.parentElement.parentElement.children[0].innerText} ${e.parentElement.parentElement.children[1].innerText}</h3>`;
+  //
   // console.log(e.parentElement.parentElement.children[0].innerText);
 
   disappeared = false;
@@ -171,26 +173,30 @@ function modify(e, id) {
   form.classList.toggle("active");
 }
 function reset(type) {
-  window.alert("This action is temporarily unavailable");
-  // message = "Are you sure to reset this budget? All budget of this type will be Zero";
-  // if (confirm(message) == true) {
-  //   userPreference = "Data saved successfully!";
-  //   fetch("reset/" + type, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "X-CSRFToken": getCSRF(),
-  //     },
-  //     body: JSON.stringify({}),
-  //   })
-  //     .catch((error) => {
-  //       console.log("ERROR", error);
-  //       window.alert(error);
-  //     })
-  //     .then(() => {
-  //       location.href = "/budget";
-  //     });
-  // }
+  var ENABLE_RESET = true;
+
+  if (ENABLE_RESET) {
+    message = "Are you sure to reset this budget? All budget of this type will be Zero";
+    if (confirm(message) == true) {
+      fetch("reset/" + type, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCSRF(),
+        },
+        body: JSON.stringify({}),
+      })
+        .catch((error) => {
+          console.log("ERROR", error);
+          window.alert(error);
+        })
+        .then(() => {
+          location.href = "/budget";
+        });
+    }
+  } else {
+    window.alert("This action is temporarily unavailable");
+  }
 }
 function archive(id) {
   location.href = "/budget/archive/" + id;
@@ -220,6 +226,7 @@ function submit() {
     body: JSON.stringify({
       original_rate: document.getElementById("original-rate").value,
       current_rate: document.getElementById("current-rate").value,
+      total_miles: document.getElementById("total-miles").value,
       // amount: parseFloat(document.getElementById("input-amount").value),
       budget_type: document.getElementById("budget-type").value,
       bol_number: document.getElementById("bol-number").value,
@@ -233,7 +240,7 @@ function submit() {
     })
 
     .then((data) => {
-      console.log("DATA_OK?: ", data);
+      console.log("DATA?: ", data);
       if (data.status != 200) {
         window.alert("Uncompleted Submit!!!");
       } else {

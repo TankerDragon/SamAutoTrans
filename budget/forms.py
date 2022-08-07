@@ -8,7 +8,7 @@ class UserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username','first_name',
-                  'last_name','user_type','is_active', 'password1', 'password2']
+                  'last_name','is_active', 'password1', 'password2']
 
 
 
@@ -16,17 +16,14 @@ class DriverForm(ModelForm):
     class Meta:
         model = Driver
         # ['user_id', 'cdl_number', 'vehicle_id', 'notes']
-        fields = '__all__'
+        fields = ['dispatcher', 'first_name', 'last_name', 'driver_type', 'gross_target', 'is_active']
 
 class LogForm(ModelForm):
     class Meta:
         model  = Log
-        fields = ['driver', 'original_rate', 'current_rate', 'budget_type', 'bol_number', 'pcs_number', 'note']
+        fields = ['driver', 'original_rate', 'current_rate', 'total_miles', 'budget_type', 'bol_number', 'pcs_number', 'note']
 
-class PasswordResetForm(UserCreationForm):
-    class Meta:
-        model = User
-        fields = ['password1', 'password2']
+
 
 
 # class AmountChangeForm(ModelForm):

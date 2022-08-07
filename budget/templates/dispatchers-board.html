@@ -1,0 +1,36 @@
+{% extends 'budget-main.html' %} {% block content %}{% load static %}
+<div class="container">
+  <div class="table">
+    <div class="row">
+      <h1>Dispatchers' gross of current week</h1>
+      <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
+    </div>
+    <table>
+      <thead class="sticky">
+        <td onclick="sort(this)" class="sortable">Full name</td>
+        <td onclick="sort(this)" class="sortable">Username</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Actual gross</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Target gross</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Percentage</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Num. of drivers</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Average RPM</td>
+      </thead>
+      <tbody id="tbody" class="zebra">
+        {% for dispatcher in dispatchers %}
+        <tr>
+          <td>{{dispatcher.first_name}} {{dispatcher.last_name}}</td>
+          <td>{{dispatcher.username}}</td>
+          <td class="bold-field align-right">{{dispatcher.actual_gross}}</td>
+          <td class="align-right">{{dispatcher.target_gross}}</td>
+          <td class="align-right bold-field">{{dispatcher.percentage}}%</td>
+          <td class="align-right">{{dispatcher.drivers}}</td>
+          <td class="align-right bold-field">{{dispatcher.rate}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{% static 'js/budget.js' %}"></script>
+
+{% endblock %}

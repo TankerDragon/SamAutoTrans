@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.main, name='budget'),
+    path('<int:id>', views.budget),
     path('between-dates/', views.getInDates, name='dates'),
     path('users/', views.users, name='users'),
     path('new-user/', views.new_user, name='new-user'),
@@ -17,6 +18,9 @@ urlpatterns = [
     path('edit-log/<int:id>', views.edit_log),
     path('deactivate-driver/<int:id>', views.deactivate_driver),
     path('activate-driver/<int:id>', views.activate_driver),
-    path('<int:id>', views.budget),
-    path('reset/<str:type>', views.reset)
+    path('reset/<str:type>', views.reset),
+    #
+    path('dispatchers-board/', views.dispatchers_board, name='dispatchers-board'),
+    path('drivers-board/', views.drivers_board, name='drivers-board')
+
 ]

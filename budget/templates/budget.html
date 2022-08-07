@@ -35,7 +35,7 @@
             <tr>
               <td>Budget type</td>
               <td id="message">Total Amount</td>
-              <td></td>
+              <td>Reset</td>
             </tr>
           </thead>
           <tbody class="first-bold">
@@ -162,8 +162,6 @@
   <div class="title-bar">Add to Budget</div>
   <div class="contain">
     <div id="csrf">{% csrf_token %}</div>
-    <label for="f-name">Full name:</label>
-    <div id="full-name"></div>
     <label for="original-rate">Original rate:</label>
     <input id="original-rate" type="number" />
     <label for="current-rate">Current rate:</label>
@@ -177,6 +175,8 @@
       <option value="R">Recovery Budget</option>
       <option value="S">Dirilis Budget</option>
     </select>
+    <label for="total-miles">Total miles:</label>
+    <input id="total-miles" type="number" />
     <label for="amount">BOL number:</label>
     <input id="bol-number" type="text" />
     <label for="amount">PCS number:</label>

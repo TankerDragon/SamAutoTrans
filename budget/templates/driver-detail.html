@@ -17,9 +17,18 @@
       {{form.driver_type}}
     </div>
     <div>
+      <label>{{form.dispatcher.label}}</label>
+      {{form.dispatcher}}
+    </div>
+    <div>
+      <label>{{form.gross_target.label}}</label>
+      {{form.gross_target}}
+    </div>
+    <div>
       <label>{{form.is_active.label}}</label>
       {{form.is_active}}
     </div>
+    {% comment %}
     <div>
       <label>Add Dispatcher</label>
       <select name="add_d" id="add_user">
@@ -29,6 +38,7 @@
         {%endfor%}
       </select>
     </div>
+    {% endcomment %} {% comment %}
     <div>
       <label>Add Updater</label>
       <select name="add_u" id="add_user">
@@ -38,11 +48,13 @@
         {%endfor%}
       </select>
     </div>
+    {% endcomment %}
 
     <input class="button" type="submit" value="Submit" />
     <span class="errors"></span>
     {{form.errors}}
   </form>
+  {% comment %}
   <div>
     <div class="table">
       <h3>Dispatchers</h3>
@@ -93,6 +105,7 @@
       </table>
     </div>
   </div>
+  {% endcomment %}
 </div>
 
 {% endblock %}

@@ -22,21 +22,28 @@
 
         <ul>
           <li>
-            <a href="{% url 'budget' %}">Budget</a>
+            <a {% if category == "budget" %}class="active"{%endif%} href="{% url 'budget' %}">Budget</a>
           </li>
+          <li>
+            <a {% if category == "drivers-gross" %}class="active"{%endif%} href="{% url 'drivers-board' %}">Drivers' gross</a>
+          </li>
+          <li>
+            <a {% if category == "dispatchers-gross" %}class="active"{%endif%} href="{% url 'dispatchers-board' %}">Dispatchers' gross</a>
+          </li>
+          
           {% if is_superuser %}
           <li>
-            <a href="{% url 'users' %}">Users</a>
+            <a {% if category == "all-dispatchers" %}class="active"{%endif%} href="{% url 'users' %}">All Dispatchers</a>
           </li>
           <li>
-            <a href="{% url 'new-user' %}">Add User</a>
+            <a {% if category == "add-dispatcher" %}class="active"{%endif%} href="{% url 'new-user' %}">Add Dispatcher</a>
           </li>
           <li>
-            <a href="{% url 'new-driver' %}">Add Driver</a>
+            <a {% if category == "add-driver" %}class="active"{%endif%} href="{% url 'new-driver' %}">Add Driver</a>
           </li>
           {% endif %}
           <li>
-            <a href="{% url 'archive' %}">Archive</a>
+            <a {% if category == "archive" %}class="active"{%endif%} href="{% url 'archive' %}">Archive</a>
           </li>
         </ul>
 

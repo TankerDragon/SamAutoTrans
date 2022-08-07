@@ -3,15 +3,24 @@ from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from budget.models import Driver, Log, LogEdit, Group
+from budget.models import Driver, Log, LogEdit
 from .forms import UserForm, DriverForm, LogForm
 from django.contrib.auth.models import User
-from .serializers import DriverSerializer
+from .serializers import DriverSerializer, LogSerializer
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 import datetime
+
+WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
 #funtions 
+def get_week_start():
+    now = datetime.datetime.now() 
+    days = WEEKDAYS.index(now.strftime("%A")) + 1  # starting date from Saturday
+    week_start = now - datetime.timedelta(days=days)
+    return week_start
+
 def get_name(id, arr):
     for a in arr:
         if id == a['id']:
@@ -109,18 +118,20 @@ def main(request):
             'total':l_total + d_total + r_total + s_total, 
             'is_superuser': request.user.is_superuser, 
             'user': request.user,
+            'category' : 'budget'
             }
         return render(request, 'budget.html', context)
     else:
-        cloned_drivers_id = Group.objects.filter(staff_id = request.user.id)
-        list_of_ids = []
-        for i in cloned_drivers_id:
-            list_of_ids.append(i.driver_id)
-        queryset = Driver.objects.filter(id__in = list_of_ids).order_by('first_name')
+        # cloned_drivers_id = Group.objects.filter(staff_id = request.user.id)
+        # list_of_ids = []
+        # for i in cloned_drivers_id:
+        #     list_of_ids.append(i.driver_id)
+        queryset = Driver.objects.filter(dispatcher=request.user).order_by('first_name')
         context = {
             'drivers': queryset, 
             'is_superuser': request.user.is_superuser, 
             'user': request.user,
+            'category' : 'budget'
             }
         return render(request, 'budget.html', context)
 
@@ -160,7 +171,7 @@ def users(request):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
         queryset = User.objects.filter(is_superuser = 0)
-        context = {'users': queryset, 'is_superuser': user.is_superuser, 'user': request.user}
+        context = {'users': queryset, 'is_superuser': user.is_superuser, 'user': request.user, 'category' : 'all-dispatchers'}
         return render(request, 'users.html', context)
     else:
         return redirect('no-access')
@@ -176,7 +187,7 @@ def new_user(request):
                 user_form.save()
                 return redirect('budget')
 
-        context = {'form': user_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        context = {'form': user_form, 'is_superuser': user.is_superuser, 'user': request.user, 'category' : 'add-dispatcher'}
         return render(request, 'new-user.html', context)
     else:
         return redirect('no-access')
@@ -213,7 +224,7 @@ def new_driver(request):
                 driver_form.save()
                 return redirect('budget')
 
-        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user}
+        context = {'form': driver_form, 'is_superuser': user.is_superuser, 'user': request.user, 'category' : 'add-driver'}
         return render(request, 'new-driver.html', context)
     else:
         return redirect('no-access')
@@ -222,39 +233,39 @@ def new_driver(request):
 def driver_detail(request, id):
     user = User.objects.get(username = request.user)
     if user.is_superuser:
-        users = User.objects.filter(is_superuser = 0)
-        print('users', users)
-        dispatchers = users.filter(user_type = 'D')
-        updaters = users.filter(user_type = 'U')
-        cloned_users_id = Group.objects.filter(driver_id = id)
-        list_of_ids = []
-        for i in cloned_users_id:
-            list_of_ids.append(i.staff_id)
+        # users = User.objects.filter(is_superuser = 0)
+        # print('users', users)
+        # dispatchers = users.filter(user_type = 'D')
+        # updaters = users.filter(user_type = 'U')
+        # cloned_users_id = Group.objects.filter(driver_id = id)
+        # list_of_ids = []
+        # for i in cloned_users_id:
+        #     list_of_ids.append(i.staff_id)
 
-        cloned_users = users.filter(id__in = list_of_ids)
+        # cloned_users = users.filter(id__in = list_of_ids)
         
         driver = Driver.objects.get(pk=id)
         driver_form = DriverForm(instance=driver)
         if request.method == 'POST':
-            dic = request.POST.dict()
-            if dic['add_d'] != '':
-                d = dispatchers.get(username = dic['add_d'])
-                if cloned_users_id.filter(staff_id = d.id).exists():
-                    print("exists")
-                else:
-                    new_g = Group()
-                    new_g.driver_id = id
-                    new_g.staff_id = d.id
-                    new_g.save()
-            if dic['add_u'] != '':
-                u = updaters.get(username = dic['add_u'])
-                if cloned_users_id.filter(staff_id = u.id).exists():
-                    print("exists")
-                else:
-                    new_g = Group()
-                    new_g.driver_id = id
-                    new_g.staff_id = u.id
-                    new_g.save()
+            # dic = request.POST.dict()
+            # if dic['add_d'] != '':
+            #     d = dispatchers.get(username = dic['add_d'])
+            #     if cloned_users_id.filter(staff_id = d.id).exists():
+            #         print("exists")
+            #     else:
+            #         new_g = Group()
+            #         new_g.driver_id = id
+            #         new_g.staff_id = d.id
+            #         new_g.save()
+            # if dic['add_u'] != '':
+            #     u = updaters.get(username = dic['add_u'])
+            #     if cloned_users_id.filter(staff_id = u.id).exists():
+            #         print("exists")
+            #     else:
+            #         new_g = Group()
+            #         new_g.driver_id = id
+            #         new_g.staff_id = u.id
+            #         new_g.save()
             ####
             driver_form = DriverForm(request.POST, instance=driver)
             if driver_form.is_valid():
@@ -264,10 +275,7 @@ def driver_detail(request, id):
         context = {
             'form': driver_form,
             'is_superuser': user.is_superuser, 
-            'user': request.user, 
-            'dispatchers': dispatchers,
-            'updaters': updaters,
-            'cloned_users': cloned_users
+            'user': request.user
             }
         return render(request, 'driver-detail.html', context)
     else:
@@ -283,11 +291,11 @@ def archive(request):
     # user = User.objects.get(username = request.user)
     # drivers = Driver.objects.all()
     if request.user.is_superuser:
-        queryset = Log.objects.all().filter(is_edited = False).order_by('-date')
+        queryset = Log.objects.filter(is_edited = False).order_by('-date')
     else:
-        in_group = Group.objects.filter(staff = request.user)
-        drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date') #, user=request.user
+        # in_group = Group.objects.filter(staff = request.user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(user = request.user, is_edited = False).order_by('-date') #, user=request.user
     
     #preparing driver names
     driver_ids = list(map(lambda q: q.driver_id, queryset))
@@ -301,7 +309,7 @@ def archive(request):
         if query.id in logEdits_list:
             query.edited_link = True
 
-    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True, 'category' : 'archive'}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
@@ -318,9 +326,9 @@ def archiveBetweenDates(request, startDate, endDate):
     if request.user.is_superuser:
         queryset = Log.objects.all().filter(is_edited = False, date__gte = start_date, date__lte = end_date).order_by('-date')
     else:
-        in_group = Group.objects.filter(staff = request.user)
-        drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False, date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
+        # in_group = Group.objects.filter(staff = request.user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(user=request.user, is_edited = False, date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
     
     #preparing driver names
     driver_ids = list(map(lambda q: q.driver_id, queryset))
@@ -334,15 +342,11 @@ def archiveBetweenDates(request, startDate, endDate):
         if query.id in logEdits_list:
             query.edited_link = True
 
-    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': True, 'category' : 'archive'}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
 def archiveBetweenDatesBy(request, id, startDate, endDate):
-    print(request)
-    print(startDate)
-    print(endDate)
-    print(id)
 
     start_date = datetime.datetime.strptime(startDate, '%Y-%m-%d')
     end_date = datetime.datetime.strptime(endDate, '%Y-%m-%d') + datetime.timedelta(days=1)
@@ -355,9 +359,9 @@ def archiveBetweenDatesBy(request, id, startDate, endDate):
     if request.user.is_superuser:
         queryset = Log.objects.all().filter(driver_id = id, is_edited = False,  date__gte = start_date, date__lte = end_date).order_by('-date')
     else:
-        in_group = Group.objects.filter(staff = request.user)
-        drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False,  date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
+        # in_group = Group.objects.filter(staff = request.user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(user =request.user, is_edited = False,  date__gte = start_date, date__lte = end_date).order_by('-date') #, user=request.user
 
     for query in queryset:
         # driver = drivers.get(id = query.driver_id)
@@ -367,7 +371,7 @@ def archiveBetweenDatesBy(request, id, startDate, endDate):
         if query.id in logEdits_list:
             query.edited_link = True
 
-    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver, 'category' : 'archive'}
     return render(request, 'archive.html', context)
 
 @login_required(login_url='login')
@@ -380,9 +384,9 @@ def driver_archive(request, id):
     if request.user.is_superuser:
         queryset = Log.objects.all().filter(driver_id = id, is_edited = False).order_by('-date')
     else:
-        in_group = Group.objects.filter(staff = request.user)
-        drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(driver_id__in = drivers_list, is_edited = False).order_by('-date') #, user=request.user
+        # in_group = Group.objects.filter(staff = request.user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        queryset = Log.objects.filter(driver_id = id, is_edited = False).order_by('-date') #, user=request.user
 
     for query in queryset:
         # driver = drivers.get(id = query.driver_id)
@@ -392,7 +396,7 @@ def driver_archive(request, id):
         if query.id in logEdits_list:
             query.edited_link = True
 
-    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver}
+    context = {'logs': queryset, 'is_superuser': request.user.is_superuser, 'user': request.user, 'many_drivers': False, 'name': driver, 'category' : 'archive'}
     return render(request, 'archive.html', context)
 
 
@@ -414,7 +418,7 @@ def archive_edits(request, id):
     for e_query in editedLogs:
         e_query.name = get_name(e_query.driver_id, driver_names)
 
-    context = {'logs': editedLogs, 'is_superuser': request.user.is_superuser, 'user': request.user}
+    context = {'logs': editedLogs, 'is_superuser': request.user.is_superuser, 'user': request.user, 'category' : 'archive'}
     return render(request, 'edited-archive.html', context)
 
 
@@ -428,13 +432,14 @@ def edit_log(request, id):
     if request.method == 'POST':
         data = request.POST
         #check if user selected its own driver
-        in_group = Group.objects.filter(staff = user)
-        drivers_list = list(map(lambda l: l.driver_id, in_group))
-        if int(data['driver']) in drivers_list or user.is_superuser:
+        check_driver = Driver.objects.get(pk = int(data['driver']))
+        # in_group = Group.objects.filter(staff = user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        if check_driver.dispatcher == request.user or user.is_superuser:
             log.is_edited = True
             log.save()
-            #getting back changed budget from driver
             driver = Driver.objects.get(id = log.driver_id)
+            #getting back changed budget from driver
             if log.budget_type == 'D':
                 driver.d_budget -= log.change
             elif log.budget_type == 'L':
@@ -452,6 +457,7 @@ def edit_log(request, id):
             new_log.original_rate = Decimal(data['original_rate'])
             new_log.current_rate = Decimal(data['current_rate'])
             new_log.change = change_new_log
+            new_log.total_miles = data['total_miles']
             new_log.budget_type = data['budget_type']
             new_log.bol_number = data['bol_number']
             new_log.pcs_number = data['pcs_number']
@@ -479,7 +485,7 @@ def edit_log(request, id):
         else:
             message = "you cant assign to this driver"
 
-    context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user, 'message': message}
+    context = {'form': log_form, 'is_superuser': user.is_superuser, 'user': user, 'message': message, 'category' : 'archive'}
     return render(request, 'edit-log.html', context)
 
 
@@ -545,7 +551,6 @@ def reset(request, type):
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])
 def budget(request, id):
-    print(request.data)
     # if request.method == 'GET':
     #     try:
     #         queryset = Driver.objects.get(pk = id)
@@ -553,32 +558,165 @@ def budget(request, id):
     #         return Response(serializer.data)
     #     except Driver.DoesNotExist:
     #         return Response(status=status.HTTP_404_NOT_FOUND)
-    user = User.objects.get(username = request.user)
 
     if request.method == 'POST':
-        try:
-            driver = Driver.objects.get(pk=id)
-            in_group = Group.objects.filter(staff = user)
-            drivers_list = list(map(lambda l: l.driver_id, in_group))
-            # print(drivers_list)
-            if user.is_superuser or driver.id in drivers_list:
-                original_rate = Decimal(request.data['original_rate'])
-                current_rate = Decimal(request.data['current_rate'])
-                amount = original_rate - current_rate
-                b_type = request.data['budget_type']
-                if b_type == 'D':
-                    driver.d_budget += amount
-                elif b_type == 'L':
-                    driver.l_budget += amount
-                elif b_type == 'R':
-                    driver.r_budget += amount
-                elif b_type == 'S':
-                    driver.s_budget += amount
-                driver.save()
-                log = Log(driver=driver, original_rate = original_rate, current_rate = current_rate, change = amount, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
+        driver = Driver.objects.get(pk=id)
+        # in_group = Group.objects.filter(staff = request.user)
+        # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        # print(drivers_list)
+        if request.user.is_superuser or driver.dispatcher == user:
+            data = request.data
+            if request.data['original_rate'] == '' or request.data['current_rate'] == '':
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            change = Decimal(request.data['original_rate']) - Decimal(request.data['current_rate'])
+            b_type = request.data['budget_type']
+            data['driver'] = id
+            data['user'] = str(request.user)
+            data['change'] = change
+            log = LogSerializer(data=data)
+            if log.is_valid():
                 log.save()
-                return Response(status=status.HTTP_200_OK)
+                if b_type == 'D':
+                    driver.d_budget += change
+                elif b_type == 'L':
+                    driver.l_budget += change
+                elif b_type == 'R':
+                    driver.r_budget += change
+                elif b_type == 'S':
+                    driver.s_budget += change
+                driver.save()
             else:
-                return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-        except Driver.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+            # original_rate = Decimal(request.data['original_rate'])
+            # current_rate = Decimal(request.data['current_rate'])
+            # amount = original_rate - current_rate
+            # b_type = request.data['budget_type']
+            # total_miles = request.data['total_miles']
+           
+            # log = Log(driver=driver, original_rate = original_rate, current_rate = current_rate, change = amount, total_miles=total_miles, budget_type=b_type, bol_number = request.data['bol_number'], pcs_number=request.data['pcs_number'], note=request.data['note'] ,user=request.user)
+            # log.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+@login_required(login_url='login')
+def drivers_board(request):
+    week_start = get_week_start()
+    till_today = datetime.datetime.now() + datetime.timedelta(days=1)
+
+    dispatchers = User.objects.all()
+    dispatchers_list = list(map(lambda d: [d.id, d.username], dispatchers))
+    logs = Log.objects.filter(date__gte = week_start, date__lte = till_today, is_edited=False)
+
+    if request.user.is_superuser:
+        drivers = Driver.objects.all().order_by('first_name')
+        # print((drivers[0]))
+        # print((logs[0]))
+    else:
+        drivers = Driver.objects.filter(dispatcher=request.user).order_by('first_name')
+
+    for driver in drivers:
+        driver.disp =''
+        for d in dispatchers_list:
+            if driver.dispatcher_id == d[0]:
+                driver.disp = d[1]
+
+        driver_logs = list(filter(lambda l: l.driver_id == driver.id, logs))
+        total_miles = 0
+        actual_gross = 0
+        for l in driver_logs:
+            total_miles += l.total_miles
+            actual_gross += l.current_rate
+
+        driver.loads = len(driver_logs)
+        driver.total_miles = total_miles
+        driver.actual_gross = actual_gross
+        if total_miles == 0:
+            driver.rate = 0
+        else:    
+            driver.rate = round((actual_gross / total_miles)*100) / 100
+
+        if driver.gross_target == 0:
+            driver.percentage = 0
+        else:    
+            driver.percentage = (actual_gross / driver.gross_target) * 100
+
+    context = {
+        'drivers': drivers, 
+        'is_superuser': request.user.is_superuser, 
+        'user': request.user,
+        'category' : 'drivers-gross'
+        }
+    return render(request, "drivers-board.html", context)
+
+
+@login_required(login_url='login')
+def dispatchers_board(request):
+    week_start = get_week_start()
+    till_today = datetime.datetime.now() + datetime.timedelta(days=1)
+
+    dispatchers = User.objects.filter(is_superuser=False)
+    dispatchers_list = list(map(lambda d: [d.id, d.username], dispatchers))
+    logs = Log.objects.filter(date__gte = week_start, date__lte = till_today, is_edited=False)
+
+    
+    drivers = Driver.objects.all()
+
+    for driver in drivers:
+
+        driver_logs = list(filter(lambda l: l.driver_id == driver.id, logs))
+        total_miles = 0
+        actual_gross = 0
+        for l in driver_logs:
+            total_miles += l.total_miles
+            actual_gross += l.current_rate
+
+        driver.total_miles = total_miles
+        driver.actual_gross = actual_gross
+        # if total_miles == 0:
+        #     driver.rate = 0
+        # else:    
+        #     driver.rate = round((actual_gross / total_miles)*100) / 100
+
+        # if driver.gross_target == 0:
+        #     driver.percentage = 0
+        # else:    
+        #     driver.percentage = (actual_gross / driver.gross_target) * 100
+    
+    for dispatcher in dispatchers:
+        dispatcher_drivers = list(filter(lambda d: d.dispatcher_id == dispatcher.id, drivers))
+        total_miles = 0
+        actual_gross = 0
+        target_gross = 0
+        for d in dispatcher_drivers:
+            total_miles += d.total_miles
+            actual_gross += d.actual_gross
+            target_gross += d.gross_target
+        
+        dispatcher.drivers = len(dispatcher_drivers)
+        dispatcher.total_miles = total_miles
+        dispatcher.actual_gross = actual_gross
+        dispatcher.target_gross = target_gross
+
+
+        if total_miles == 0:
+            dispatcher.rate = 0
+        else:    
+            dispatcher.rate = round((actual_gross / total_miles)*100) / 100
+
+        if target_gross == 0:
+            dispatcher.percentage = 0
+        else:    
+            dispatcher.percentage = (actual_gross / target_gross) * 100
+
+
+    context = {
+        'dispatchers': dispatchers, 
+        'is_superuser': request.user.is_superuser, 
+        'user': request.user,
+        'category' : 'dispatchers-gross'
+        }
+    return render(request, "dispatchers-board.html", context)

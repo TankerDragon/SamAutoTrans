@@ -1,0 +1,44 @@
+{% extends 'budget-main.html' %} {% block content %}{% load static %}
+<div class="container">
+  <div class="table">
+    <div class="row">
+      <h1>Drivers' gross of current week</h1>
+      <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
+    </div>
+    <table>
+      <thead class="sticky">
+        <td onclick="sort(this)" class="sortable">First name</td>
+        <td onclick="sort(this)" class="sortable">Last name</td>
+        {% if is_superuser %}
+        <td onclick="sort(this)" class="sortable">Dispatcher</td>
+        {% endif %}
+        <td class="align-right" onclick="sort(this)" class="sortable">Actual gross</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Target gross</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Total miles</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Percentage</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Num. of loads</td>
+        <td class="align-right" onclick="sort(this)" class="sortable">Average RPM</td>
+      </thead>
+      <tbody id="tbody" class="zebra">
+        {% for driver in drivers %} {% if driver.is_active %}
+        <tr>
+          <td>{{driver.first_name}}</td>
+          <td>{{driver.last_name}}</td>
+          {% if is_superuser %}
+          <td>{{driver.disp}}</td>
+          {% endif %}
+          <td class="bold-field align-right">{{driver.actual_gross}}</td>
+          <td class="align-right">{{driver.gross_target}}</td>
+          <td class="align-right">{{driver.total_miles}}</td>
+          <td class="align-right bold-field">{{driver.percentage}}%</td>
+          <td class="align-right">{{driver.loads}}</td>
+          <td class="align-right bold-field">{{driver.rate}}</td>
+        </tr>
+        {%endif%} {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{% static 'js/budget.js' %}"></script>
+
+{% endblock %}
