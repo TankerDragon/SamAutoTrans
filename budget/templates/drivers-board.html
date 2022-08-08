@@ -2,7 +2,7 @@
 <div class="container">
   <div class="table">
     <div class="row">
-      <h1>Drivers' gross of current week</h1>
+      <h1>Drivers' gross of current week ({{week_start}} - {{week_end}})</h1>
       <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
     </div>
     <table>
@@ -19,9 +19,18 @@
         <td class="align-right" onclick="sort(this)" class="sortable">Num. of loads</td>
         <td class="align-right" onclick="sort(this)" class="sortable">Average RPM</td>
       </thead>
-      <tbody id="tbody" class="zebra">
+      <tbody id="tbody">
         {% for driver in drivers %} {% if driver.is_active %}
-        <tr>
+        <tr
+          style="background: {% if driver.percentage > 100 %}#d9ffcc
+          {% elif driver.percentage > 80 and driver.percentage <= 100%}#f2ffcc
+          {% elif driver.percentage > 60 and driver.percentage <= 80%}#ffffcc
+          {% elif driver.percentage > 40 and driver.percentage <= 60%}#fff2cc
+          {% elif driver.percentage > 20 and driver.percentage <= 40%}#ffe6cc
+          {% elif driver.percentage >= 0 and driver.percentage <= 20%}#ffcccc
+          {% endif %};
+          "
+        >
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
           {% if is_superuser %}

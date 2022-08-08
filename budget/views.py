@@ -564,7 +564,7 @@ def budget(request, id):
         # in_group = Group.objects.filter(staff = request.user)
         # drivers_list = list(map(lambda l: l.driver_id, in_group))
         # print(drivers_list)
-        if request.user.is_superuser or driver.dispatcher == user:
+        if request.user.is_superuser or driver.dispatcher == request.user:
             data = request.data
             if request.data['original_rate'] == '' or request.data['current_rate'] == '':
                 return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -605,6 +605,7 @@ def budget(request, id):
 @login_required(login_url='login')
 def drivers_board(request):
     week_start = get_week_start()
+    week_end = week_start + datetime.timedelta(days=6)
     till_today = datetime.datetime.now() + datetime.timedelta(days=1)
 
     dispatchers = User.objects.all()
@@ -642,13 +643,17 @@ def drivers_board(request):
         if driver.gross_target == 0:
             driver.percentage = 0
         else:    
-            driver.percentage = (actual_gross / driver.gross_target) * 100
+            driver.percentage = round((actual_gross / driver.gross_target) * 10000) / 100
+
+    drivers = sorted(drivers, key=lambda d: d.percentage, reverse=True)
 
     context = {
         'drivers': drivers, 
         'is_superuser': request.user.is_superuser, 
         'user': request.user,
-        'category' : 'drivers-gross'
+        'category' : 'drivers-gross',
+        "week_start": week_start.date,
+        "week_end": week_end.date
         }
     return render(request, "drivers-board.html", context)
 
@@ -656,6 +661,7 @@ def drivers_board(request):
 @login_required(login_url='login')
 def dispatchers_board(request):
     week_start = get_week_start()
+    week_end = week_start + datetime.timedelta(days=6)
     till_today = datetime.datetime.now() + datetime.timedelta(days=1)
 
     dispatchers = User.objects.filter(is_superuser=False)
@@ -710,13 +716,18 @@ def dispatchers_board(request):
         if target_gross == 0:
             dispatcher.percentage = 0
         else:    
-            dispatcher.percentage = (actual_gross / target_gross) * 100
+            dispatcher.percentage = round((actual_gross / target_gross) * 10000) / 100
+        
+    
+    dispatchers = sorted(dispatchers, key=lambda d: d.percentage, reverse=True)
 
 
     context = {
         'dispatchers': dispatchers, 
         'is_superuser': request.user.is_superuser, 
         'user': request.user,
-        'category' : 'dispatchers-gross'
+        'category' : 'dispatchers-gross',
+        "week_start": week_start.date,
+        "week_end": week_end.date
         }
     return render(request, "dispatchers-board.html", context)

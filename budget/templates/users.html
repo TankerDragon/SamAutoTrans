@@ -8,7 +8,6 @@
         <td>First name</td>
         <td>Last name</td>
         <td>Username</td>
-        <td>User Type</td>
         <td>Last Login</td>
         <td>Date Joined</td>
         <td>Actions</td>
@@ -19,7 +18,6 @@
           <td>{{user.first_name}}</td>
           <td>{{user.last_name}}</td>
           <td>{{user.username}}</td>
-          <td>{% if user.user_type == 'D' %}Dispatcher{% elif user.user_type == 'U' %}Updater{% endif %}</td>
           <td>{{user.last_login}}</td>
           <td>{{user.date_joined}}</td>
           <td class="highLited">

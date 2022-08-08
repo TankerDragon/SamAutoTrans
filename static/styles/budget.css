@@ -161,7 +161,7 @@ nav h3 {
 }
 .table table tbody tr:hover,
 .table table .zebra tr:hover {
-  background-color: rgb(116, 131, 155);
+  background-color: rgb(116, 131, 155) !important;
   color: white;
 }
 .table table .first-row-highlited tr:first-child {
