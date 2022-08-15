@@ -34,40 +34,41 @@ def greet(message):
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
 
-    if message.text == "rak":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    if "rak" in message.text:
+    #  bot.send_message(message.chat.id, '🦞🦀♋️')
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "RAK":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "RAK" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Rak":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Rak" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Раксиз":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Раксиз" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Рак":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Рак" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Раксиз":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Раксиз" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Раклар":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Раклар" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "raklar":
-     bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "raklar" in message.text:
+     bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Raklar":
-      bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Raklar" in message.text:
+      bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Rakslar":
-      bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Rakslar" in message.text:
+      bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Rakchalar":
-      bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Rakchalar" in message.text:
+      bot.reply_to(message, '🦞🦀♋️')
 
-    elif message.text == "Raks":
-      bot.send_message(message.chat.id, '🦞🦀♋️')
+    elif "Raks" in message.text:
+      bot.reply_to(message, '🦞🦀♋️')
 
 bot.polling()

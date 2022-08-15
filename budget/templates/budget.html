@@ -136,7 +136,7 @@
         <td>Total Budget</td>
         <td>Actions</td>
       </thead>
-      <tbody id="tbody">
+      <tbody id="tbody" class="zebra">
         {% for driver in drivers %} {% if driver.is_active == 0 %}
         <tr>
           <td>{{driver.first_name}}</td>
@@ -164,6 +164,7 @@
     <div id="csrf">{% csrf_token %}</div>
     <label for="original-rate">Original rate:</label>
     <input id="original-rate" type="number" />
+    {% comment %} <label for="is-dirilis">Load by Dirilis:</label> <input id="is-dirilis" type="check" /> {% endcomment %}
     <label for="current-rate">Current rate:</label>
     <input id="current-rate" type="number" />
     <label for="amount" id="amount-message" style="color: blue">no change</label>

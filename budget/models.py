@@ -42,7 +42,7 @@ class Log(models.Model):
     bol_number = models.CharField(max_length=15, blank=True)
     pcs_number = models.CharField(max_length=15, blank=True)
     user = models.CharField(max_length=20)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(null=True)
     note = models.CharField(max_length=100, blank=True)
     is_edited = models.BooleanField(default=False)
 

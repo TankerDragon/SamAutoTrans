@@ -26,7 +26,7 @@ urlpatterns = [
     path('logout/', views.logoutUser, name='logout'),
     path('password-reset/', views.password_reset, name='password-reset'),
     path('budget/', include('budget.urls')),
-    path('trailers/', include('trailers.urls')),
+    # path('trailers/', include('trailers.urls')),
     # path('eld/', include('eld.urls')),
     # path('samsara/', include('samsara.urls')),
     # path('telesam/', include('telesam.urls')),

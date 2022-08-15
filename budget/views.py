@@ -437,6 +437,7 @@ def edit_log(request, id):
         # drivers_list = list(map(lambda l: l.driver_id, in_group))
         if check_driver.dispatcher == request.user or user.is_superuser:
             log.is_edited = True
+            created_time = log.date
             log.save()
             driver = Driver.objects.get(id = log.driver_id)
             #getting back changed budget from driver
@@ -462,7 +463,10 @@ def edit_log(request, id):
             new_log.bol_number = data['bol_number']
             new_log.pcs_number = data['pcs_number']
             new_log.note = data['note']
-            new_log.save()
+            new_log.date = created_time
+            saved_log = new_log.save()
+            # saved_log.date = created_time
+            # saved_log.save()
 
             #saving new changed budget to driver
             driver = Driver.objects.get(id = new_log.driver_id)
@@ -511,10 +515,14 @@ def activate_driver(request, id):
         return redirect('no-access')
     return redirect('budget')
 
+ENABLE_RESET = False
 
 @login_required(login_url='login')
 @api_view(['GET', 'POST'])
 def reset(request, type):
+    if not ENABLE_RESET:
+        return HttpResponse('action temporarily not available')
+
     if request.user.is_superuser:
         #
         if type == 'D':
@@ -573,9 +581,15 @@ def budget(request, id):
             data['driver'] = id
             data['user'] = str(request.user)
             data['change'] = change
+            # now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+            # print(now)
+            # data['date'] = now
             log = LogSerializer(data=data)
             if log.is_valid():
-                log.save()
+                saved_log = log.save()
+                saved_log.date = datetime.datetime.now()
+                saved_log.save()
+                print(saved_log.id)
                 if b_type == 'D':
                     driver.d_budget += change
                 elif b_type == 'L':

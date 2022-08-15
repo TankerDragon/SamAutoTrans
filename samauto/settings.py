@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'budget',
-    'trailers',
+    # 'trailers',
     # 'eld',
     # 'telesam',
     # 'samsara',
