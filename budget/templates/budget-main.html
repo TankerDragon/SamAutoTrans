@@ -25,10 +25,10 @@
             <a {% if category == "budget" %}class="active"{%endif%} href="{% url 'budget' %}">Accounting</a>
           </li>
           <li>
-            <a {% if category == "drivers-gross" %}class="active"{%endif%} href="{% url 'drivers-board' %}">Drivers' gross</a>
+            <a {% if category == "drivers-gross" %}class="active"{%endif%} href="{% url 'drivers-board' 0 %}">Drivers' gross</a>
           </li>
           <li>
-            <a {% if category == "dispatchers-gross" %}class="active"{%endif%} href="{% url 'dispatchers-board' %}">Dispatchers' gross</a>
+            <a {% if category == "dispatchers-gross" %}class="active"{%endif%} href="{% url 'dispatchers-board' 0 %}">Dispatchers' gross</a>
           </li>
           
           {% if is_superuser %}

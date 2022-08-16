@@ -3,6 +3,10 @@
   <div class="table">
     <div class="row">
       <h1>Drivers' gross of current week ({{week_start}} - {{week_end}})</h1>
+      <div class="week-buttons">
+        <i class="fa-solid fa-arrow-left" onclick="prew_week()"></i>
+        <i class="fa-solid fa-arrow-right" onclick="next_week()"></i>
+      </div>
       <input type="text" id="search-input" onkeyup="search()" placeholder="Search by name..." />
     </div>
     <table>

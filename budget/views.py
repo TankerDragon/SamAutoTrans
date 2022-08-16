@@ -16,7 +16,8 @@ WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 
 
 #funtions 
 def get_week_start():
-    now = datetime.datetime.now() 
+    now = datetime.datetime.now()
+    now = now.replace(hour=0, minute=0, second=1)
     days = WEEKDAYS.index(now.strftime("%A")) + 1  # starting date from Saturday
     week_start = now - datetime.timedelta(days=days)
     return week_start
@@ -617,14 +618,14 @@ def budget(request, id):
 
 
 @login_required(login_url='login')
-def drivers_board(request):
-    week_start = get_week_start()
+def drivers_board(request, week_before):
+    week_start = get_week_start() - datetime.timedelta(days=(7 * week_before))
     week_end = week_start + datetime.timedelta(days=6)
-    till_today = datetime.datetime.now() + datetime.timedelta(days=1)
+    # till_today = datetime.datetime.now() + datetime.timedelta(days=1)
 
     dispatchers = User.objects.all()
     dispatchers_list = list(map(lambda d: [d.id, d.username], dispatchers))
-    logs = Log.objects.filter(date__gte = week_start, date__lte = till_today, is_edited=False)
+    logs = Log.objects.filter(date__gte = week_start, date__lte = week_end + datetime.timedelta(days=1), is_edited=False)
 
     if request.user.is_superuser:
         drivers = Driver.objects.all().order_by('first_name')
@@ -673,14 +674,14 @@ def drivers_board(request):
 
 
 @login_required(login_url='login')
-def dispatchers_board(request):
-    week_start = get_week_start()
+def dispatchers_board(request, week_before):
+    week_start = get_week_start() - datetime.timedelta(days=(7 * week_before))
     week_end = week_start + datetime.timedelta(days=6)
-    till_today = datetime.datetime.now() + datetime.timedelta(days=1)
+    # till_today = datetime.datetime.now() + datetime.timedelta(days=1)
 
     dispatchers = User.objects.filter(is_superuser=False)
     dispatchers_list = list(map(lambda d: [d.id, d.username], dispatchers))
-    logs = Log.objects.filter(date__gte = week_start, date__lte = till_today, is_edited=False)
+    logs = Log.objects.filter(date__gte = week_start, date__lte = week_end + datetime.timedelta(days=1), is_edited=False)
 
     
     drivers = Driver.objects.all()

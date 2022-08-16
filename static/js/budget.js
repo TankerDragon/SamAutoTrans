@@ -216,6 +216,20 @@ function activate_driver(id) {
 function edit_log(id) {
   location.href = "/budget/edit-log/" + id;
 }
+function prew_week() {
+  arr = location.href.split("/");
+  num = parseInt(arr[arr.length - 1]) + 1;
+  location.href = "/budget/drivers-board/" + num;
+}
+function next_week() {
+  arr = location.href.split("/");
+  num = parseInt(arr[arr.length - 1]) - 1;
+  if (num < 0) {
+    window.alert("error: cant find next week!");
+  } else {
+    location.href = "/budget/drivers-board/" + num;
+  }
+}
 function submit() {
   fetch(current_driver, {
     method: "POST",

@@ -20,7 +20,7 @@ urlpatterns = [
     path('activate-driver/<int:id>', views.activate_driver),
     path('reset/<str:type>', views.reset),
     #
-    path('dispatchers-board/', views.dispatchers_board, name='dispatchers-board'),
-    path('drivers-board/', views.drivers_board, name='drivers-board')
+    path('dispatchers-board/<int:week_before>', views.dispatchers_board, name='dispatchers-board'),
+    path('drivers-board/<int:week_before>', views.drivers_board, name='drivers-board')
 
 ]
