@@ -296,8 +296,10 @@ def archive(request):
     else:
         # in_group = Group.objects.filter(staff = request.user)
         # drivers_list = list(map(lambda l: l.driver_id, in_group))
-        queryset = Log.objects.filter(user = request.user, is_edited = False).order_by('-date') #, user=request.user
-    
+        drivers = Driver.objects.filter(dispatcher = request.user).values('id')
+        driverIDs = [d['id'] for d in drivers]
+        queryset = Log.objects.filter(driver_id__in = driverIDs, is_edited = False).order_by('-date')
+        
     #preparing driver names
     driver_ids = list(map(lambda q: q.driver_id, queryset))
     driver_names = Driver.objects.filter(pk__in = driver_ids).values('id', 'first_name', 'last_name')
@@ -436,6 +438,11 @@ def edit_log(request, id):
         check_driver = Driver.objects.get(pk = int(data['driver']))
         # in_group = Group.objects.filter(staff = user)
         # drivers_list = list(map(lambda l: l.driver_id, in_group))
+        #check pcs number
+        check_pcs = Log.objects.filter(pcs_number=data['pcs_number'], is_edited=False).values('pcs_number')
+        if check_pcs and log.pcs_number != data['pcs_number']:
+            return redirect('/budget/edit-log/' + str(id))
+
         if check_driver.dispatcher == request.user or user.is_superuser:
             log.is_edited = True
             created_time = log.date
@@ -570,18 +577,23 @@ def budget(request, id):
 
     if request.method == 'POST':
         driver = Driver.objects.get(pk=id)
+        #print(request.data)
         # in_group = Group.objects.filter(staff = request.user)
         # drivers_list = list(map(lambda l: l.driver_id, in_group))
         # print(drivers_list)
         if request.user.is_superuser or driver.dispatcher == request.user:
             data = request.data
-            if request.data['original_rate'] == '' or request.data['current_rate'] == '':
+            print(type(request.data['total_miles']))
+            check_pcs = Log.objects.filter(pcs_number=request.data['pcs_number'], is_edited=False).values('pcs_number')
+            if request.data['original_rate'] == '' or request.data['current_rate'] == '' or check_pcs:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
+            #print(request.data)
             change = Decimal(request.data['original_rate']) - Decimal(request.data['current_rate'])
             b_type = request.data['budget_type']
             data['driver'] = id
             data['user'] = str(request.user)
             data['change'] = change
+            #data['total_miles'] = int(float(data['total_miles']))
             # now = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
             # print(now)
             # data['date'] = now
@@ -590,7 +602,7 @@ def budget(request, id):
                 saved_log = log.save()
                 saved_log.date = datetime.datetime.now()
                 saved_log.save()
-                print(saved_log.id)
+                #print(saved_log.id)
                 if b_type == 'D':
                     driver.d_budget += change
                 elif b_type == 'L':
@@ -601,7 +613,8 @@ def budget(request, id):
                     driver.s_budget += change
                 driver.save()
             else:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                print(log.errors)
+                return Response(log.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
             # original_rate = Decimal(request.data['original_rate'])

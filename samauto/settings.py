@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-rp9aohqt_z3+zpgqu(@v^lzidxa81s(nxe&r++8(p3szwqd_o6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,17 +96,17 @@ WSGI_APPLICATION = 'samauto.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        #  'HOST': '5.182.26.11',
-        #  'USER': 'host1010_sam',
-        #  'NAME': 'host1010_datastore',
-        #  'PASSWORD': '@akb21s4m$'
+         # 'ENGINE': 'django.db.backends.mysql',
+         # 'HOST': '5.182.26.11',
+         # 'USER': 'host1010_sam',
+         # 'NAME': 'host1010_datastore',
+         # 'PASSWORD': '@akb21s4m$'
         
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'localhost',
         'USER': 'root',
         'NAME': 'samauto',
-        'PASSWORD': '@akb21s4m$'
+        'PASSWORD': 'a&i3j2JOfa9o&pfLd9Ujh@Ab6C%i5c'
         # 'PASSWORD': 'dragondD8090'
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -149,6 +149,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')

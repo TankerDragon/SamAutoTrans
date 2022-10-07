@@ -97,12 +97,11 @@
       </thead>
       <tbody id="tbody">
         {% for driver in drivers %} {% if driver.is_active %}
-        <tr>
+	<tr  {% if driver.total_budget < 0 %} style="background: #ffcccc;"{% endif %} >
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
           <td>
-            {% if driver.driver_type == "O88" %}Owner operator - 88% {% elif driver.driver_type == "O85" %}Owner operator - 85% {% elif driver.driver_type == "C30" %}Company driver - 30% {% elif
-            driver.driver_type == "C35" %}Company driver - 35% {% elif driver.driver_type == "L**" %}Lease operator {% elif driver.driver_type == "R**" %}Rental operator{%endif%}
+            {% if driver.driver_type == "O88" %}Owner operator - 88% {% elif driver.driver_type == "O85" %}Owner operator - 85% {% elif driver.driver_type == "C30" %}Company driver - 30% {% elif driver.driver_type == "C35" %}Company driver - 35% {% elif driver.driver_type == "L**" %}Lease operator {% elif driver.driver_type == "R**" %}Rental operator{%endif%}
           </td>
           <td class="align-right">{{driver.d_budget}}</td>
           <td class="align-right">{{driver.l_budget}}</td>
@@ -138,14 +137,14 @@
       </thead>
       <tbody id="tbody" class="zebra">
         {% for driver in drivers %} {% if driver.is_active == 0 %}
-        <tr>
+	<tr {% if driver.total_budget < 0 %} style="background: #ffcccc;"{% endif %}>
           <td>{{driver.first_name}}</td>
           <td>{{driver.last_name}}</td>
           <td>{% if driver.driver_type == "OO"%}Owner{% elif driver.driver_type == "CD" %}Company{% elif driver.driver_type == "LO" %}Lease{% endif %}</td>
           <td>{{driver.d_budget}}</td>
           <td>{{driver.l_budget}}</td>
           <td>{{driver.r_budget}}</td>
-          <td class="bold-field">{{driver.total_budget}}</td>
+	  <td class="bold-field">{{driver.total_budget}}</td>
           <td class="highLited">
             <abbr title="Archive"><i onclick="archive({{ driver.id }})" class="fa-solid fa-clock-rotate-left"></i></abbr>
             <abbr title="Personal information"><i onclick="driver_detail({{ driver.id }})" class="fa-solid fa-user"></i></abbr>

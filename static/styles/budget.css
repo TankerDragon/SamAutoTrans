@@ -247,8 +247,8 @@ nav h3 {
   animation: appear 0.3s ease;
 }
 .inactive {
-  animation: disappear 0.3s ease;
-}
+	  animation: disappear 0.01s ease;
+  }
 #form .buttons {
   width: 100%;
   margin: auto;
